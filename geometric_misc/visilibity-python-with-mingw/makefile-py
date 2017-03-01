@@ -1,0 +1,11 @@
+#phony target.
+current_target: python
+
+python:
+	python setup.py build_ext --swig-cpp --compiler=mingw32 --inplace
+	rm -rf build
+	rm visilibity_wrap.cpp 
+
+clean:
+	rm .*~ *.pyc
+
