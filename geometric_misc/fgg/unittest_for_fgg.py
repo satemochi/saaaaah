@@ -16,7 +16,8 @@ class SampleTest(unittest.TestCase):
         dss = unichr(0) + unichr(1) + unichr(0) + unichr(2) + unichr(0)
         dss += unichr(3) + unichr(0) + unichr(4) + unichr(0)
         self.assertEqual(dss, f.get_init_dss())
-        self.assertEqual(2 * f.get_polygon_vertex_count() - 3, len(dss))
+        self.assertEqual(2 * f.get_polygon_vertex_count() - 3,
+                         len(f.get_init_dss()))
 
     def test_print_dss(self):
         f = fgg.fgg()
