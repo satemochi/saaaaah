@@ -57,5 +57,5 @@ if __name__ == '__main__':
     nests(f, g, pos)
     paths(g, pos)
 
-    plt.savefig('7.png')
+    plt.savefig('with_shortest_paths_6_(1,10).png')
     plt.show()

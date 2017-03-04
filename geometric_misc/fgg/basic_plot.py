@@ -45,5 +45,5 @@ if __name__ == '__main__':
     labels(f, g, pos)
     nests(f, g, pos)
 
-    plt.savefig('7.png')
+    plt.savefig('basic_plot_7.png')
     plt.show()

@@ -2,7 +2,14 @@ import fgg
 import unittest
 
 
-class SampleTest(unittest.TestCase):
+class FggTest(unittest.TestCase):
+
+    def __init__(self, *args, **kwargs):
+        super(FggTest, self).__init__(*args, **kwargs)
+        self.catalan_num = [0, 0, 0, 1, 2, 5, 14, 42, 132, 429,
+                            1430, 4862, 16796, 58786]
+        self.edge_num = [0, 0, 0, 0, 1, 5, 21, 84, 330, 1287,
+                         5005, 19448, 75582, 293930]
 
     def test_constractor(self):
         f = fgg.fgg()
@@ -107,17 +114,94 @@ class SampleTest(unittest.TestCase):
         self.assertEqual(ans, map(lambda x: f.print_dss(x),
                                   f.get_neighbors(init_dss)))
 
-    def test_gen(self):
+    def test_gen_2(self):
+        n = 2
+        f = fgg.fgg(n)
+        f.gen()
+        self.assertEqual(self.catalan_num[n], len(f.get_vertices()))
+        self.assertEqual(self.catalan_num[n], len(f.get_ref_table()))
+        self.assertEqual(self.edge_num[n], len(f.get_edges()))
+
+    def test_gen_3(self):
+        n = 3
+        f = fgg.fgg(n)
+        f.gen()
+        self.assertEqual(self.catalan_num[n], len(f.get_vertices()))
+        self.assertEqual(self.catalan_num[n], len(f.get_ref_table()))
+        self.assertEqual(self.edge_num[n], len(f.get_edges()))
+
+    def test_gen_4(self):
+        n = 4
+        f = fgg.fgg(n)
+        f.gen()
+        self.assertEqual(self.catalan_num[n], len(f.get_vertices()))
+        self.assertEqual(self.catalan_num[n], len(f.get_ref_table()))
+        self.assertEqual(self.edge_num[n], len(f.get_edges()))
+
+    def test_gen_5(self):
+        n = 5
+        f = fgg.fgg(n)
+        f.gen()
+        self.assertEqual(self.catalan_num[n], len(f.get_vertices()))
+        self.assertEqual(self.catalan_num[n], len(f.get_ref_table()))
+        self.assertEqual(self.edge_num[n], len(f.get_edges()))
+
+    def test_gen_6(self):
+        n = 6
+        f = fgg.fgg(n)
+        f.gen()
+        self.assertEqual(self.catalan_num[n], len(f.get_vertices()))
+        self.assertEqual(self.catalan_num[n], len(f.get_ref_table()))
+        self.assertEqual(self.edge_num[n], len(f.get_edges()))
+
+    def test_gen_7(self):
         n = 7
         f = fgg.fgg(n)
         f.gen()
-        catalan_num = [0, 0, 0, 1, 2, 5, 14, 42, 132, 429,
-                       1430, 4862, 16796, 58786]
-        edge_num = [0, 0, 0, 0, 1, 5, 21, 84, 330, 1287,
-                    5005, 19448, 75582, 293930]
-        self.assertEqual(catalan_num[n], len(f.get_vertices()))
-        self.assertEqual(catalan_num[n], len(f.get_ref_table()))
-        self.assertEqual(edge_num[n], len(f.get_edges()))
+        self.assertEqual(self.catalan_num[n], len(f.get_vertices()))
+        self.assertEqual(self.catalan_num[n], len(f.get_ref_table()))
+        self.assertEqual(self.edge_num[n], len(f.get_edges()))
+
+    def test_gen_8(self):
+        n = 8
+        f = fgg.fgg(n)
+        f.gen()
+        self.assertEqual(self.catalan_num[n], len(f.get_vertices()))
+        self.assertEqual(self.catalan_num[n], len(f.get_ref_table()))
+        self.assertEqual(self.edge_num[n], len(f.get_edges()))
+
+    def test_gen_9(self):
+        n = 9
+        f = fgg.fgg(n)
+        f.gen()
+        self.assertEqual(self.catalan_num[n], len(f.get_vertices()))
+        self.assertEqual(self.catalan_num[n], len(f.get_ref_table()))
+        self.assertEqual(self.edge_num[n], len(f.get_edges()))
+
+    def test_gen_10(self):
+        n = 10
+        f = fgg.fgg(n)
+        f.gen()
+        self.assertEqual(self.catalan_num[n], len(f.get_vertices()))
+        self.assertEqual(self.catalan_num[n], len(f.get_ref_table()))
+        self.assertEqual(self.edge_num[n], len(f.get_edges()))
+
+    def test_gen_11(self):
+        n = 11
+        f = fgg.fgg(n)
+        f.gen()
+        self.assertEqual(self.catalan_num[n], len(f.get_vertices()))
+        self.assertEqual(self.catalan_num[n], len(f.get_ref_table()))
+        self.assertEqual(self.edge_num[n], len(f.get_edges()))
+
+# Because of elapsed time, omitting, then commented out.
+#    def test_gen_12(self):
+#        n = 12
+#        f = fgg.fgg(n)
+#        f.gen()
+#        self.assertEqual(self.catalan_num[n], len(f.get_vertices()))
+#        self.assertEqual(self.catalan_num[n], len(f.get_ref_table()))
+#        self.assertEqual(self.edge_num[n], len(f.get_edges()))
 
     def test_get_triangulation_edges(self):
         f = fgg.fgg()

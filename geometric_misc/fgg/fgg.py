@@ -102,6 +102,8 @@ class fgg():
         return S
 
     def gen(self):
+        if self._polygon_vertex_count < 3:
+            return
         init_dss = self.get_init_dss()
         self._vertices.append(init_dss)
         self._dss_id_ref_tab[init_dss] = 0
