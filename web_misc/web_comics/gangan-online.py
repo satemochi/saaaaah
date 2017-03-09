@@ -1,3 +1,4 @@
+import logging
 import os
 import signal
 import shutil
@@ -77,6 +78,7 @@ def archive(files, title, chap):
         if not os.path.exists(title):
             os.mkdir(title)
         shutil.move(zfname, title)
+        logging.critical(title + "/" + zfname)
 
 
 def tear_down(driver):
@@ -96,6 +98,9 @@ def snapshot(title):
 
 
 if __name__ == '__main__':
+    logging.basicConfig(format='%(asctime)s %(message)s',
+                        datefmt='%Y/%m/%d',
+                        filename='gangan-online.log', level=logging.CRITICAL)
     titles = ['watashiga', 'adachito', 'nozaki', 'nanashino', 'barakamon',
               'realno']
     for title in titles:

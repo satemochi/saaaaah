@@ -24,7 +24,7 @@ def latest_chap(title):
 
 def get_imgs(title, s, e, wait_sec=30):
     for chap in range(s, e):
-        print chap
+        msg = title[:-1] + "\t" + str(chap)
         fname = str(chap).zfill(4) + '.jpg'
         data = 'http://sai-zen-sen.jp/comics/twi4/' + title + 'works/' + fname
         r = requests.get(data, stream=True)
@@ -34,14 +34,17 @@ def get_imgs(title, s, e, wait_sec=30):
                 shutil.copyfileobj(r.raw, f)
             time.sleep(wait_sec)
 
+
 def update(title):
     s = current_chap(title)
     e = latest_chap(title)
-    print "current:", str(s - 1), ", latest:", str(e - 1), ", gap:", str(e - s)
+    msg = title[:-1] + ": current:" + str(s - 1) + \
+            ", latest:" + str(e - 1) + ", gap:" + str(e - s)
+    print msg
     get_imgs(title, s, e)
 
 if __name__ == '__main__':
-    titles = ['tomochan/', 'bungakushoujo/', 'honeycome/']
+    titles = ['tomochan/', 'bungakushoujo/', 'honeycome/', 'moutele/', 
+              'marian/']
     for t in titles:
-        print t
         update(t)

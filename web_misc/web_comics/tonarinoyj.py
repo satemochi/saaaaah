@@ -1,3 +1,4 @@
+import logging
 import os
 import shutil
 import signal
@@ -80,6 +81,7 @@ def archiving(files, title, chap):
         for f in files:
             os.remove(f)
         shutil.move(zfname, title)
+        logging.critical(title + "/" + zfname)
 
 
 def tearDown(driver):
@@ -98,6 +100,9 @@ def snapshot(title):
 
 
 if __name__ == '__main__':
+    logging.basicConfig(format='%(asctime)s %(message)s',
+                        datefmt='%Y/%m/%d',
+                        filename='tonarinoyj.log', level=logging.CRITICAL)
     titles = ['onepanman', 'shakunetu', 'ebinachan']
     for title in titles:
         print title
