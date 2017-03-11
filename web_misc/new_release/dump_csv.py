@@ -5,11 +5,13 @@ from datetime import datetime
 import numpy as np
 import pandas as pd
 
+
 def get():
     sql = "SELECT title, volume, publish_date, reviewers, stars FROM comics"
     conn = sqlite3.connect('comics.db')
     c = conn.cursor()
     return c.execute(sql).fetchall()
+
 
 def dump(modified_date):
     fname = 'dump_csv-' + modified_date + '.csv'
@@ -25,5 +27,6 @@ def dump(modified_date):
         df.to_csv(fname, index=False, encoding='utf-8')
 
 if __name__ == '__main__':
-    d = datetime.fromtimestamp(os.stat('comics.db').st_mtime).strftime('%Y%m%d')
+    mtime = os.stat('comics.db').st_mtime
+    d = datetime.fromtimestamp(mtime).strftime('%Y%m%d')
     dump(d)

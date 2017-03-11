@@ -8,7 +8,7 @@ from matplotlib.font_manager import FontProperties
 
 if len(sys.argv) != 2:
     sys.exit(0)
-#df = pd.read_csv('dump_csv-20170218.csv', encoding='utf-8')
+
 df = pd.read_csv(sys.argv[1], encoding='utf-8')
 df = df[df['n_rev'] >= 12].sort_values(by=['stars', 'n_rev'], ascending=[1, 1])
 
@@ -36,6 +36,4 @@ for i, (r, s, p) in enumerate(zip(df['n_rev'], df['stars'], df['pub_date'])):
         ax.get_yticklabels()[i].set_color('g')
 
 fig.tight_layout()
-#plt.savefig('nrev3b0218.png', bbox_inches='tight')
 plt.savefig('nrev3b' + sys.argv[1][13:-3]+'png', bbox_inches='tight')
-#plt.show()
