@@ -19,9 +19,11 @@ plt.text(0.0, 0.0, subtour, fontsize=12)
 suffix = r'$1 \leq i \neq j \leq n - 1$'
 plt.text(10.0, 0.0, suffix, fontsize=12)
 
-others = r'$0 \leq x_{ij} \leq 1, \ \ \ u_i \in \mathbb{Z}, \ \ \ u_0 = 0,'
-others += r'\ \ \ \ \forall\ i,\ j\ \in \{0, \ldots, n - 1\}$'
+others = r'$x_{ij} \in \{0, 1\},\ \ \ u_i \in \mathbb{Z}, \ \ \ u_0 = 0,'
+others += r'\ \ \ 1\leq u_i \leq n - 1,$'
 plt.text(0.0, -1.0, others, fontsize=12)
+others = r'$\forall i, j \in \{0, 1, \ldots, n - 1\}$'
+plt.text(10.0, -1.5, others, fontsize=12)
 
 plt.title('The Miller-Tucker-Zemlin Formulation')
 plt.gca().set_xlim([-2, 20])

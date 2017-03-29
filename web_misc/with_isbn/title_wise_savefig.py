@@ -54,8 +54,10 @@ class bookmeter():
 
 
 def request(title):
-    with open('isbn.json', 'r') as f:
+    with open('isbn2.json', 'r') as f:
         isbn_dict = json.load(f)
+    if title not in isbn_dict:
+        return None
     columns = ['booklog', 'bl_ratings', 'bl_reviews', 'bookmeter']
     rows = []
     print title
@@ -74,7 +76,8 @@ def get_df(title):
         return pd.read_csv(csv, index_col='vol', encoding='utf-8')
     else:
         df = request(title)
-        df.to_csv(csv, encoding='utf-8')
+        if df is not None:
+            df.to_csv(csv, encoding='utf-8')
         return df
 
 
@@ -91,13 +94,14 @@ def draw(df, title):
     plt.title(title, fontproperties=fp)
 
 if __name__ == '__main__':
-    titles = [u'ONE PIECE', u'ブラッククローバー', u'HUNTER X HUNTER',
-              u'ちはやふる', u'NARUTO -ナルト-', u'BLEACH', u'君に届け',
-              u'鬼滅の刃']
+    titles = [u'ワンピース', u'ナルト', u'ブラッククローバー', u'鬼滅の刃',
+              u'ちはやふる', u'君に届け']
     for t in titles:
         if os.path.exists(t + '.png'):
             continue
         df = get_df(t)
+        if df is None:
+            quit()
         draw(df, t)
         plt.savefig(t + '.png', bbox_inches='tight')
         plt.close()

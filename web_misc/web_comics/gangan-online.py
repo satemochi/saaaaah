@@ -101,8 +101,8 @@ if __name__ == '__main__':
     logging.basicConfig(format='%(asctime)s %(message)s',
                         datefmt='%Y/%m/%d',
                         filename='gangan-online.log', level=logging.CRITICAL)
-    titles = ['watashiga', 'adachito', 'nozaki', 'nanashino', 'barakamon',
-              'realno']
+    titles = ['watashiga', 'adachito', 'nozaki', 'barakamon',
+              'realno', 'kinako', 'torimania']
     for title in titles:
         print title
         snapshot(title)

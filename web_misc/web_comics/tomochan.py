@@ -1,5 +1,6 @@
 from glob import glob
 import os
+from os.path import exists, splitext, basename
 import shutil
 import time
 import requests
@@ -7,10 +8,10 @@ from bs4 import BeautifulSoup
 
 
 def current_chap(d):
-    if not os.path.exists(d):
+    if not exists(d):
         os.mkdir(d)
         return 1
-    return int(os.path.splitext(os.path.basename(max(glob(d + '*'))))[0]) + 1
+    return int(splitext(basename(max(glob(d + '*.jpg'))))[0]) + 1
 
 
 def latest_chap(title):

@@ -175,7 +175,7 @@ def update():
                 amazon(c, None, td_.a['href'], cid)
             else:
                 amazon(c, isbn, td_.a['href'], cid)
-            time.sleep(random.randint(240, 360))
+            time.sleep(random.randint(120, 180))
             break
         conn.commit()
     tear_down(conn)

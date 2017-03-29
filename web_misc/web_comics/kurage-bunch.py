@@ -46,7 +46,7 @@ def get_chaps(title, chaps):
         print title, str(chap)
         if os.path.exists(title + '/' + str(chap) + '.zip'):
             continue
-        imgs = get_imgs(base_url + "/" + title + "/" + str(chap) + "/")
+        imgs = get_imgs(base_url + "/" + title + "/" + str(chap).zfill(2) + "/")
         archiving(imgs, title, str(chap))
 
 
@@ -80,5 +80,5 @@ def update(titles):
 
 
 if __name__ == '__main__':
-    titles = ['yamashoku', 'shojoshumatsu']
+    titles = ['yamashoku', 'shojoshumatsu', 'orgasm', 'youkai']
     update(titles)
