@@ -104,6 +104,7 @@ class maxsat:
                     unknown += 1
                 elif l * signs[abs(l) - 1] > 0:
                     costs += self.__costs[i]
+                    unknown = 0
                     break
             costs += self.__costs[i] * (1 - 0.5**unknown)
         return costs
