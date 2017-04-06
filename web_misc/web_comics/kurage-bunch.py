@@ -82,3 +82,4 @@ def update(titles):
 if __name__ == '__main__':
     titles = ['yamashoku', 'shojoshumatsu', 'orgasm', 'youkai']
     update(titles)
+    print 'kurage Fin.'

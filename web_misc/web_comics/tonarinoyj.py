@@ -61,7 +61,7 @@ def setUp(url, wait_sec=30):
     return (driver, pages)
 
 
-def screenshot(driver, title, pages=8, wait_sec=10):
+def screenshot(driver, title, pages=8, wait_sec=30):
     files = []
     for i in range(pages):
         fname = title + "-" + str(i).zfill(2) + '.png'
@@ -97,13 +97,16 @@ def snapshot(title):
             files = screenshot(driver, title, pages)
             archiving(files, title, chap)
             tearDown(driver)
+        else:
+            print title, "none..."
 
 
 if __name__ == '__main__':
     logging.basicConfig(format='%(asctime)s %(message)s',
                         datefmt='%Y/%m/%d',
                         filename='tonarinoyj.log', level=logging.CRITICAL)
-    titles = ['onepanman', 'shakunetu', 'ebinachan']
+    titles = ['onepanman', 'shakunetu', 'ebinachan', 'aoyamakun',
+              'dutch_wife']
     for title in titles:
-        print title
         snapshot(title)
+    print "tonarinoyj fin..."

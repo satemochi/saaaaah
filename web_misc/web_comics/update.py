@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
-import subprocess
-import threading
+import codecs
 from glob import glob
 import os
-import codecs
+import subprocess
+import threading
+import time
+import schedule
 
 
 def enjoy(s):
@@ -33,8 +35,7 @@ def remove_logs():
     for f in glob('*.log'):
         os.remove(f)
 
-
-if __name__ == '__main__':
+def update():
     remove_logs()
     scripts = ['kurage-bunch.py', 'tomochan.py', 'gangan-online.py',
                'tonarinoyj.py']
@@ -49,3 +50,9 @@ if __name__ == '__main__':
     resizes = resize_check()
     for t, f in resizes:
         ensmall(t, f)
+
+if __name__ == '__main__':
+    schedule.every().days.at('13:00').do(update)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)

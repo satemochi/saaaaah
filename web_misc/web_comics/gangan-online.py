@@ -95,6 +95,8 @@ def snapshot(title):
             files = screenshot(driver, title, pages)
             archive(files, title, chap)
             tear_down(driver)
+        else:
+            print title, "none"
 
 
 if __name__ == '__main__':
@@ -104,5 +106,5 @@ if __name__ == '__main__':
     titles = ['watashiga', 'adachito', 'nozaki', 'barakamon',
               'realno', 'kinako', 'torimania']
     for title in titles:
-        print title
         snapshot(title)
+    print "gangan fin"
