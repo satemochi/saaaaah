@@ -162,7 +162,7 @@ def better_of_two(sat):
 
 def nonlinear_prob(x):
     assert x >= 0 and x <= 1
-    prob = random.uniform(1 - (0.25**x), 4**x - 1)
+    prob = random.uniform(1 - (0.25**x), 4**(x - 1))
     return random.random() <= prob
 
 
@@ -174,7 +174,7 @@ def nonlinear_randomized_rounding(sat):
 
 if __name__ == '__main__':
     random.seed(0)
-    c, v, k = 100, 10, 2
+    c, v, k = 100, 30, 2
     cs = gen(c, v, k)
     costs = [random.random() for i in range(c)]
 
