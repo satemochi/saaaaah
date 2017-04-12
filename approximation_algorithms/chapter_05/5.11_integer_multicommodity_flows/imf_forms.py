@@ -29,7 +29,7 @@ def form2(i):
     fs = 13
     space = 12
 
-    objective = r'$\min \ \ k|E|W + \sum_{i=0}^{k-1} t_k$'
+    objective = r'$\min \ \ k|E|W + \sum_{i=0}^{k-1} u_k$'
     plt.text(-1.0, i, objective, fontsize=fs)
 
     subjects = r'$\sum_{i=0}^{k-1} \left(x_{uv}^i + x_{vu}^i \right) \leq W,$'
@@ -52,7 +52,7 @@ def form2(i):
     subjects = r'$i=0, \ldots, k-1$'
     plt.text(0.5 + space, i - delta * 4, subjects, fontsize=fs)
 
-    subjects = r'$\sum_{(u,v) \in E} x_{uv}^i  \leq t_i,$'
+    subjects = r'$\sum_{(u,v) \in E} x_{uv}^i  \leq u_i,$'
     plt.text(0.5, i - delta * 5, subjects, fontsize=fs, color='g')
     subjects = r'$i=0, \ldots, k-1$'
     plt.text(0.5 + space, i - delta * 5, subjects, fontsize=fs)

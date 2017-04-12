@@ -8,6 +8,7 @@ import random
 class integer_multicommodity_flows:
     def __init__(self, digraph, flows):
         assert nx.is_directed(digraph), '[digraph error]'
+        assert all(s != t for s, t in flows), '[illegal flow error]'
         self.__g = digraph
         self.__edges = g.edges()
         self.__flows = flows
@@ -170,9 +171,9 @@ def integer_path(imf):
     return paths
 
 
-def get_simple_paths(paths, s, t):
+def get_simple_paths(edges, s, t):
     sg = nx.DiGraph()
-    sg.add_edges_from(paths)
+    sg.add_edges_from(edges)
     return [sp for sp in nx.all_simple_paths(sg, source=s, target=t)]
 
 
