@@ -34,8 +34,7 @@ def draw(df):
     p = figure(title='Differences of reveiw-counts: my favorite comic titles',
                tools=tools, x_axis_type='datetime',
                plot_width=800, plot_height=400)
-    titles = set(df['title'])
-    for t, color in itertools.izip(titles, colors):
+    for t, color in itertools.izip(df['title'], colors):
         diffs = df[df.title == t]['n_rev'].diff()
         diffs[diffs < 2] = 0
         if all(diffs < 5):
