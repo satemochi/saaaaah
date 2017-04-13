@@ -13,8 +13,10 @@ def get():
     return c.execute(sql).fetchall()
 
 
-def dump(modified_date):
-    fname = 'dump_csv-' + modified_date + '.csv'
+def dump():
+    mtime = os.stat('comics.db').st_mtime
+    d = datetime.fromtimestamp(mtime).strftime('%Y%m%d')
+    fname = 'dump_csv-' + d + '.csv'
     if not os.path.exists(fname):
         items = get()
         col = ('title', 'vol', 'pub_date', 'n_rev', 'stars')
@@ -27,6 +29,4 @@ def dump(modified_date):
         df.to_csv(fname, index=False, encoding='utf-8')
 
 if __name__ == '__main__':
-    mtime = os.stat('comics.db').st_mtime
-    d = datetime.fromtimestamp(mtime).strftime('%Y%m%d')
-    dump(d)
+    dump()

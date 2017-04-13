@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from dump_csv import dump
 from datetime import datetime
 import random
 import os.path
@@ -9,6 +10,7 @@ import requests.packages.urllib3
 from bs4 import BeautifulSoup
 from difflib import SequenceMatcher
 from fake_useragent import UserAgent
+import schedule
 
 
 def set_up():
@@ -179,7 +181,12 @@ def update():
             break
         conn.commit()
     tear_down(conn)
+    dump()
 
 
 if __name__ == '__main__':
-    update()
+#    update()
+    schedule.every().days.at('0:45').do(update)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
