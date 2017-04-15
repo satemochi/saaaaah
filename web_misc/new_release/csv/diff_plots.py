@@ -4,7 +4,7 @@ import itertools
 import re
 import pandas as pd
 from bokeh.plotting import figure, show, ColumnDataSource
-from bokeh.models import HoverTool
+from bokeh.models import HoverTool, Range1d
 from bokeh.palettes import Category20 as palette
 
 
@@ -28,33 +28,51 @@ def read_csv():
     return pd.concat(data_frames)
 
 
+def figure_env():
+    p = figure(tools='hover', x_axis_type='datetime',
+               plot_width=800, plot_height=450)
+    p.select(HoverTool).tooltips = [('Title', '@title'),
+                                    ('Vol. ', '@vol'),
+                                    ('Logging Date', '@date'), 
+                                    ('Publish Date', '@pubd'),
+                                    ('Review count', '@rev'),
+                                    ('Diff of reviews', '@y'),
+                                    ('Stars', '@star')]
+    p.toolbar_location = None
+    return p
+
+
+def get_diffs(df, t):
+    diffs = df[df.title == t].groupby('vol')['n_rev'].diff()
+    diffs = diffs.fillna(df[df.title == t]['n_rev'])
+    diffs.iloc[0] = 0
+    diffs[diffs < 2] = 0
+    return diffs
+
+
+def get_src(df, diffs, t):
+    return ColumnDataSource(
+            data={'x': diffs.index,
+                  'y': diffs,
+                  'title': [t] * len(diffs),
+                  'date': diffs.index.format(),
+                  'rev': df[df.title == t]['n_rev'],
+                  'pubd': df[df.title == t]['pub_date'].fillna('-'),
+                  'star': df[df.title == t]['stars'].fillna(0.0),
+                  'vol': df[df.title == t]['vol']})
+
+
 def draw(df):
+    p = figure_env()
     colors = itertools.cycle(palette[20])
-    tools = 'hover'
-    p = figure(title='Differences of reveiw-counts: my favorite comic titles',
-               tools=tools, x_axis_type='datetime',
-               plot_width=800, plot_height=400)
-    for t, color in itertools.izip(df['title'], colors):
-        diffs = df[df.title == t]['n_rev'].diff()
-        diffs[diffs < 2] = 0
+    ymax = 0
+    for t, color in itertools.izip(set(df['title']), colors):
+        diffs = get_diffs(df, t)
+        ymax = max(diffs) if ymax < max(diffs) else ymax
         if all(diffs < 5):
             continue
-        source = ColumnDataSource(
-                data={'x': diffs.index, 'y': diffs,
-                      'title': [t] * len(diffs),
-                      'date': diffs.index.format(),
-                      'rev': df[df.title == t]['n_rev'],
-                      'pubd': df[df.title == t]['pub_date'].fillna('-'),
-                      'star': df[df.title == t]['stars'].fillna(0.0),
-                      'vol': df[df.title == t]['vol']})
-        p.line('x', 'y', source=source, color=color)
-        p.select(HoverTool).tooltips = [('Date', '@date'),
-                                        ('Title', '@title'),
-                                        ('Vol. ', '@vol'),
-                                        ('Stars', '@star'),
-                                        ('Review count', '@rev'),
-                                        ('Publish Date', '@pubd')]
-    p.toolbar_location = None
+        p.line('x', 'y', source=get_src(df, diffs, t), color=color)
+    p.y_range = Range1d(0, ymax * 1.5)
     show(p)
 
 
