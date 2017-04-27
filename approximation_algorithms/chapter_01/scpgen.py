@@ -92,15 +92,17 @@ Incorrect settings might be occcured on parameters.\n"
         return s
 
     def __is_contained(self, ith_subset, elem):
-        return 0 if elem not in self.sets[ith_subset] else 1
-
-    def __get_vector(self, elem):
-        return [self.__is_contained(ith_subset, elem)
-                for ith_subset in range(self.covering_set_num)]
+        return 1 if elem in self.sets[ith_subset] else 0
 
     def get_rows(self):
         for elem in range(self.universal_set_size):
-            yield self.__get_vector(elem)
+            yield [self.__is_contained(ith_subset, elem)
+                   for ith_subset in range(self.covering_set_num)]
+
+    def get_cols(self):
+        for ith_subset in range(self.covering_set_num):
+            yield [self.__is_contained(ith_subset, elem)
+                   for elem in range(self.universal_set_size)]
 
     def get_f(self):
         fi = [0] * (self.universal_set_size)

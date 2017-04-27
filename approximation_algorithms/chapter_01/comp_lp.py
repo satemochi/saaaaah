@@ -28,5 +28,5 @@ def solve_lp(scp_gen):
     lpsolve('delete_lp', lp)
 
 if __name__ == '__main__':
-    scp_gen = scpgen(10, 100, 0.5, 3)
+    scp_gen = scpgen(10, 100, 0.5, 0)
     solve_lp(scp_gen)

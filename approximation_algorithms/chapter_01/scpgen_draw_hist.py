@@ -13,5 +13,5 @@ def draw(sc):
     plt.show()
 
 if __name__ == '__main__':
-    sc = scpgen(10, 100, 0.5, 9)
+    sc = scpgen(10, 100, 0.5, 0)
     draw(sc)
