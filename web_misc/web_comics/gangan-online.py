@@ -104,7 +104,7 @@ if __name__ == '__main__':
                         datefmt='%Y/%m/%d',
                         filename='gangan-online.log', level=logging.CRITICAL)
     titles = ['watashiga', 'adachito', 'nozaki', 'barakamon',
-              'realno', 'kinako', 'torimania']
+              'realno', 'kinako', 'torimania', 'tanakakun', 'azumisan']
     for title in titles:
         snapshot(title)
     print "gangan fin"
