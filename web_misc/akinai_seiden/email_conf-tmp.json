@@ -1,0 +1,7 @@
+{
+	"smtp_server": "smtp.mail.yahoo.co.jp",
+	"smtp_user": "satemochi",
+	"smtp_passwd": "*********",
+	"sender": "******@yahoo.co.jp",
+	"destination": ["*****@*****.jp"]
+}
