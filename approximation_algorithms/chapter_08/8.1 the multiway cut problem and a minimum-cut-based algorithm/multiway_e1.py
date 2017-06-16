@@ -16,19 +16,22 @@ def gen(k):
 
 
 def multiway_cut(g, srcs):
-    cutset = set()
     t = g.number_of_nodes()
     for s in srcs:
-        for u in srcs:
-            if u == s:
-                continue
-            g.add_edge(u, t, cost=float('inf'))
+        g.add_edge(s, t, cost=float('inf'))
+
+    cutset = set()
+    for s in srcs:
+        g.remove_edge(s, t)
         cut_val, partition = nx.minimum_cut(g, s, t, capacity='cost')
-        g.remove_node(t)
 
         reachable, non_reachable = partition
         for u, nbrs in ((n, g[n]) for n in reachable):
-            cutset.update((u, v) for v in nbrs if v in non_reachable)
+            cutset.update((u, v) for v in nbrs if v not in reachable)
+
+        g.add_edge(s, t, cost=float('inf'))
+
+    g.remove_node(t)
     return cutset
 
 
