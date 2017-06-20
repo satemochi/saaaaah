@@ -128,7 +128,7 @@ class multiway_cut:
         plt.gca().set_axis_off()
         plt.gca().set_aspect('equal')
         plt.tight_layout()
-        plt.savefig('multiway_e2.png', bbox_inches='tight')
+        plt.savefig('multiway_cut_rrounding_output.png', bbox_inches='tight')
         plt.show()
 
 
