@@ -95,14 +95,22 @@ Incorrect settings might be occcured on parameters.\n"
         return 1 if elem in self.sets[ith_subset] else 0
 
     def get_rows(self):
+        """ to be used at defining a (primal) set cover problem """
         for elem in range(self.universal_set_size):
             yield [self.__is_contained(ith_subset, elem)
                    for ith_subset in range(self.covering_set_num)]
 
     def get_cols(self):
+        """ to be used at defining a dual """
         for ith_subset in range(self.covering_set_num):
             yield [self.__is_contained(ith_subset, elem)
                    for elem in range(self.universal_set_size)]
+
+
+    def get_sets(self, e_i):
+        """ returning sub sets containing the element e_i """
+        return [s_j for s_j in range(self.covering_set_num)
+                if self.__is_contained(s_j, e_i)]
 
     def get_f(self):
         fi = [0] * (self.universal_set_size)
