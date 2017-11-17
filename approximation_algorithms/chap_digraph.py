@@ -1,10 +1,10 @@
 import networkx as nx
 from matplotlib import pyplot as plt
-from matplotlib import cm
+from matplotlib.colors import CSS4_COLORS as mcolors
 
 
 def add_each_chaps(g, chapter, captions):
-    c = cm.Pastel2((chapter % 8) / 8., 1)
+    c = mcolors.keys()[chapter * 6]
     for i in range(len(captions)):
         g.add_node(str(chapter + 1) + '.' + str(i + 1),
                    caption=captions[i], color=c)
@@ -109,7 +109,7 @@ def add_chapters(g):
 def add_relationships(g):
     terms = ['scheduling',              # 0
              'max sat',                 # 1
-             'maximum independent set',  # 2
+             'maximum independent set', # 2
              'vertex cover',            # 3
              'facility location',       # 4
              'unique games',            # 5
@@ -276,7 +276,7 @@ def draw(g):
     colors = [g.node[v]['color'] for v in g.nodes_iter()]
     nodelist = g.nodes()
     # nodelist = [v for v in g.nodes_iter() if g.degree(v) > 0]
-    nx.draw_networkx(g, pos=pos, node_color=colors, font_size=6,
+    nx.draw_networkx(g, pos=pos, node_color=colors, font_size=6, alpha=0.5,
                      node_size=100, arrows=False, nodelist=nodelist)
     #                 labels=nx.get_node_attributes(g, 'caption'))
 
@@ -290,5 +290,6 @@ if __name__ == '__main__':
     g = nx.DiGraph()
     add_chapters(g)
     add_relationships(g)
+    nx.write_gml(g, 'chaps.gml')
     draw(g)
     plt.show()
