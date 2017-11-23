@@ -17,7 +17,7 @@ def greedy():
     s = r'${\bf while} \ I \ $ is not a set cover $\ {\bf do}$'
     plt.gca().text(2.0, 3.0 - 0.72, s, **fn)
 
-    s = r'$\ell \leftarrow \arg\ \min_{j: \hat{S}_j \neq \emptyset} \ \ \frac{w_j}{|S_j|}$'
+    s = r'$\ell \leftarrow \argmin_{j: \hat{S}_j \neq \emptyset} \ \ \frac{w_j}{|\hat{S}_j|}$'
     plt.gca().text(4.5, 3.0 - 1.2, s, **fn)
 
     s = r'$I \leftarrow I \cup \{\ell\}$'
