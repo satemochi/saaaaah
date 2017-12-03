@@ -52,6 +52,7 @@ def update():
         ensmall(t, f)
 
 if __name__ == '__main__':
+    update()
     schedule.every().days.at('13:00').do(update)
     while True:
         schedule.run_pending()
