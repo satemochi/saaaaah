@@ -1,5 +1,6 @@
 from itertools import izip
 import math
+from operator import add
 import sys
 from matplotlib import pyplot as plt
 import networkx as nx
@@ -23,7 +24,8 @@ class tutte_embedding:
     def __argmax(self, array):
         return max(izip(array, xrange(len(array))))[1]
 
-    def __get_cycle(self, g, mi=None):
+#    def __get_cycle(self, g, mi=None):
+    def __get_cycle(self, g, mi=3):
         cb = nx.cycle_basis(g)
         if not mi or mi >= len(cb):
             mi = self.__argmax([len(c) for c in cb])
@@ -91,13 +93,8 @@ class tutte_embedding:
 def __draw(g, ax=None, title=None, pos=None):
     if not ax:
         ax = plt.gca()
-    nx.draw_networkx(g, pos=pos, ax=ax, node_color='g',
-                     with_labels=False, node_size=20)
-    if pos:
-        pts = pos.values()
-        pts += [[100, 100], [100, -100], [-100, 0]]
-        voronoi_plot_2d(Voronoi(pts), ax=ax, show_vertices=False,
-                        line_alpha=0.25)
+    nx.draw_networkx(g, pos=pos, ax=ax, node_color='orange',
+                     with_labels=True, node_size=200)
     if title:
         ax.set_title(title)
     ax.set_xlim([-1.2, 1.2])
@@ -106,14 +103,69 @@ def __draw(g, ax=None, title=None, pos=None):
     ax.set_aspect('equal')
 
 
+def non_recursive_dfs(g):
+    visited = [False] * nx.number_of_nodes(g)
+    for v in g.nodes():
+        if not visited[v]:
+            yield v
+            visited[v] = True
+            stack = [(v, iter(g[v]))]
+            while stack:
+                parent, children = stack[-1]
+                try:
+                    child = next(children)
+                    if not visited[child]:
+                        yield child
+                        visited[child] = True
+                        stack.append((child, iter(g[child])))
+                except StopIteration:
+                    stack.pop()
+
+
+def rdfs(g, v, visited):
+    if not visited[v]:
+        yield v
+        visited[v] = True
+        for w in iter(g[v]):
+            for x in rdfs(g, w, visited):
+                yield x
+
+
+def recursive_dfs(g):
+    visited = [False] * nx.number_of_nodes(g)
+    for v in g.nodes():
+        for x in rdfs(g, v, visited):
+            yield x
+
+
+def __draw_labels(g, ax=None, labels=None, pos=None):
+    if not labels or not pos:
+        return
+    if not ax:
+        ax = plt.gca()
+
+    order = [0] * nx.number_of_nodes(g)
+    for i, v in enumerate(labels(g)):
+        order[v] = i
+    offset = 0.075
+    for v in g.nodes():
+        pos[v] = map(add, pos[v], (offset, offset))
+    nx.draw_networkx_labels(g, ax=ax, pos=pos, font_color='b',
+                            labels={v: o for v, o in enumerate(order)})
+
+
 if __name__ == '__main__':
-    fname, g = 'tutte3.png', nx.tutte_graph()
+    fname, g = 'dfs_example1.png', nx.petersen_graph()
     fig, (ax1, ax2) = plt.subplots(ncols=2, figsize=(8, 4))
 
     te = tutte_embedding(g)
-    __draw(g, ax1, 'ordinary Tutte\'s embedding', te.pos())
-    __draw(g, ax2, 'centroidal Voronoi relaxation', te.rpos())
 
+    __draw(g, ax1, 'non-recursive version', te.rpos())
+    __draw_labels(g, ax=ax1, labels=non_recursive_dfs, pos=te.rpos())
+
+    __draw(g, ax2, 'recursive version', te.rpos())
+    __draw_labels(g, ax=ax2, labels=recursive_dfs, pos=te.rpos())
+
+#    plt.savefig(fname, bbox_inches='tight')
     plt.tight_layout()
     plt.show()
-    plt.savefig(fname, bbox_inches='tight')

@@ -114,6 +114,6 @@ if __name__ == '__main__':
     __draw(g, ax1, 'ordinary Tutte\'s embedding', te.pos())
     __draw(g, ax2, 'centroidal Voronoi relaxation', te.rpos())
 
+#    plt.savefig(fname, bbox_inches='tight')
     plt.tight_layout()
     plt.show()
-    plt.savefig(fname, bbox_inches='tight')
