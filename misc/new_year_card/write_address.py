@@ -80,7 +80,7 @@ if __name__ == '__main__':
     for i, row in df.iterrows():
         if 'x' in row['printable']:
             continue
-        draw_sample(pdf)
+#        draw_sample(pdf)
         draw_family(pdf, row[u'family'])
         draw_name1(pdf, row[u'name1'])
         if not pd.isnull(row[u'name2']):
