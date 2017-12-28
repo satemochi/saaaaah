@@ -1,5 +1,6 @@
 from tutte_embedding import tutte_embedding
 from collections import defaultdict
+from itertools import combinations
 import math
 from operator import mul
 import random
@@ -48,7 +49,8 @@ def hierarchical_decomposition(g, pos, dists, ri, pi):
                 if len(B) != 0:
                     C[i - 1].append(B)
                     S -= B
-                    edges.append((repr(c), repr(B), 2**i))
+#                    edges.append((repr(c), repr(B), 2**i))
+                    edges.append((repr(c), repr(B), 2**(i-1)))
                     if len(B) > 1:
                         plt.gca().add_patch(plt.Circle(pos[u], ri[i - 1],
                                                        fc='none', ec='g'))
@@ -70,14 +72,31 @@ def draw_results(g, pos, T, r):
     plt.gca().set_ylim(-1.1 * r, 1.1 * r)
 
 
+def draw_dist_gaps(dists, T):
+    Tdists = dict(nx.all_pairs_dijkstra_path_length(T))
+    x, o, a = [], [], []
+    for u, v in combinations(range(nx.number_of_nodes(g)), 2):
+        x.append(repr((u, v)))
+        o.append(dists[u][v])
+        a.append(Tdists[repr(set([u]))][repr(set([v]))])
+    plt.clf()
+    i = range(len(o))
+    plt.bar(i, o, label="original")
+    plt.bar(i, a, bottom=o, label="tree metrics")
+    plt.legend(loc='best')
+    plt.xticks(i, x, rotation=90)
+
+
 if __name__ == '__main__':
     r = 2**9
     g, pos = get_instance(r)
     dists, log_delta = get_distances(g)
     ri, pi = random_parameter(log_delta, nx.number_of_nodes(g))
     print 'ri:', str(['{0:.2f}'.format(n) for n in ri]).replace("'", "")
-    print 'pi:', pi 
+    print 'pi:', pi
 
     T = hierarchical_decomposition(g, pos, dists, ri, pi)
     draw_results(g, pos, T, r)
     plt.savefig('embedded_graph_img.png', bbox_inches='tight')
+    draw_dist_gaps(dists, T.to_undirected())
+    plt.savefig('dist_gaps.png', bbox_inches='tight')
