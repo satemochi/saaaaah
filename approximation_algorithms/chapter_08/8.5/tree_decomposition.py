@@ -81,8 +81,8 @@ def draw_dist_gaps(dists, T):
         a.append(Tdists[repr(set([u]))][repr(set([v]))])
     plt.clf()
     i = range(len(o))
+    plt.bar(i, a, label="tree metrics")
     plt.bar(i, o, label="original")
-    plt.bar(i, a, bottom=o, label="tree metrics")
     plt.legend(loc='best')
     plt.xticks(i, x, rotation=90)
 
