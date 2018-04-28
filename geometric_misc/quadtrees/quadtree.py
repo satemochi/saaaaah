@@ -95,7 +95,7 @@ class node:
         self.lc = location_code
         self.qt.loc[repr(self)] = self
         self.a = ancestor
-        if (self.sq.L > 1) and (self.bep[1] - self.bep[0] > self.qt.k):
+        if self.sq.L > 1 and len(self) > self.qt.k:
             self.__subdivision()
         else:
             for p in self.qt.p[self.bep[0]:self.bep[1]]:
@@ -104,18 +104,25 @@ class node:
     def __repr__(self):
         return str(self.lc).zfill(self.h)
 
+    def __len__(self):
+        return self.bep[1] - self.bep[0]
+
     def __subdivision(self):
         assert(self.sq.L > 1)
         subsq = self.sq.subsq()
         beps = self.__partitioning()
-        for i in xrange(4):
-            if beps[i]:
+        for i, be in enumerate(beps):
+           if be:
                 assert(all(subsq[i].containing(p)
-                           for p in self.qt.p[beps[i][0]:beps[i][1]]))
-                self.c[i] = node(self.qt, beps[i], subsq[i],
+                           for p in self.qt.p[be[0]:be[1]]))
+                self.c[i] = node(self.qt, be, subsq[i],
                                  self.lc * 10 + i, self.h + 1, self)
 
-    def __extract_with_quadrants(self):
+    def __partitioning(self):
+        subsets = self.__extract_subsets_with_quadrants()
+        return self.__construct_begin_end_pairs(subsets)
+
+    def __extract_subsets_with_quadrants(self):
         pts = self.qt.p[self.bep[0]:self.bep[1]]
         cx, cy = self.sq.x + (self.sq.L >> 1), self.sq.y + (self.sq.L >> 1)
         subs = []
@@ -129,7 +136,7 @@ class node:
 
     def __replace_points(self, subs):
         new_pts = np.concatenate(subs, axis=0)
-        head, tail = self.bep[0], self.bep[1]
+        head, tail = self.bep
         if head > 0:
             new_pts = np.concatenate([self.qt.p[:head], new_pts], axis=0)
         if tail < len(self.qt.p):
@@ -139,17 +146,13 @@ class node:
 
     def __construct_begin_end_pairs(self, subs):
         head, beps = self.bep[0], []
-        for i in xrange(4):
-            if len(subs[i]) > 0:
-                beps.append((head, head + len(subs[i])))
-                head += len(subs[i])
+        for s in subs:
+            if len(s) > 0:
+                beps.append((head, head + len(s)))
+                head += len(s)
             else:
                 beps.append(None)
         return beps
-
-    def __partitioning(self):
-        subs = self.__extract_with_quadrants()
-        return self.__construct_begin_end_pairs(subs)
 
     def plot(self):
         self.sq.plot()
@@ -158,14 +161,14 @@ class node:
                         self.qt.p[self.bep[0]:self.bep[1], 1],
                         color='g', s=16, zorder=100)
         else:
-            for i in xrange(4):
-                if self.c[i]:
-                    self.c[i].plot()
+            for c in self.c:
+                if c:
+                    c.plot()
 
     def find_leaf(self, x, y):
-        for i in xrange(4):
-            if self.c[i] and self.c[i].sq.containing((x, y)):
-                return self.c[i].find_leaf(x, y)
+        for c in self.c:
+            if c and c.sq.containing((x, y)):
+                return c.find_leaf(x, y)
         # then now we are on a leaf or highest inner node containing (x, y)
         print self.qt.p[self.bep[0]:self.bep[1]]
         print str(self)
@@ -178,7 +181,8 @@ class node:
     def __neighbors(self):
         base = [self.qt.lt.neighbor(self.lc, i) for i in xrange(8)]
         B = [c if len(str(c)) <= self.h else None for c in base]
-        return [c if str(c).zfill(self.h) in self.qt.loc else None for c in B]
+        return [str(c).zfill(self.h)
+                if str(c).zfill(self.h) in self.qt.loc else None for c in B]
 
 
 class quadtree:
@@ -227,6 +231,7 @@ class quadtree:
         """
         Draw current quadtree structures
         """
+        plt.cla()
         self.qt.plot()
 
         plt.gca().set_aspect('equal')
