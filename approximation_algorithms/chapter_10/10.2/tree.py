@@ -36,6 +36,7 @@ class max_independent_set_for_tree:
             v = self.waiting.pop(0)
             self.__update_tbl(v)
             self.__update_stack(v)
+            self.checked.append(v)
 
         root = self.checked[-1]
         t, f = self.T[(root, True)], self.T[(root, False)]
@@ -61,7 +62,6 @@ class max_independent_set_for_tree:
         w = self.__find_tbp(v)
         if w is not None and w not in self.waiting:
             self.waiting.append(w)
-        self.checked.append(v)
 
     def __e(self, tup):     # weight estimation
         return sum(self.g.node[v]['w'] for v in tup)
@@ -93,5 +93,5 @@ if __name__ == '__main__':
     nx.draw_networkx_nodes(g, pos, node_size=ns, node_color='g',
                            nodelist=iset, alpha=.75)
     plt.axis('equal')
-    plt.savefig('independent_set_on_tree.png', bbox_inches='tight')
+#    plt.savefig('independent_set_on_tree.png', bbox_inches='tight')
     plt.show()
