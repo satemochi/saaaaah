@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 import networkx as nx
 from networkx.algorithms.planarity import check_planarity
 import numpy as np
-from scipy.spatial import Voronoi, voronoi_plot_2d
+from scipy.spatial import Voronoi
 from shapely.geometry import Polygon, Point
 
 
