@@ -95,8 +95,8 @@ class constraint_list:
         return True
 
     def merge(self, other):
-        # assert(not self.empty and not other.empty)
-        # assert(self < other or self == other)
+        assert(not self.empty and not other.empty)
+        assert(self < other or self == other)
 
         if not other._oneSided():
             return False
@@ -110,7 +110,7 @@ class constraint_list:
                 other.H.left.pop()
                 if (other.H.l_empty or (not other.H.r_empty and
                                         other.H.l_lo > other.H.r_lo)):
-                    other.H.left, other.H.right = other.H.right, other.H.left
+                    other.H.c[0], other.H.c[1] = other.H.c[1], other.H.c[0]
         else:
             hi = 1 if self.H.l_hi < self.H.r_hi else 0
             lo = -hi + 1
