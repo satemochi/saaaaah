@@ -57,7 +57,7 @@ def send_data(client, host):
 def insert_data(client, temp, humi, host):
     json_body = [{'measurement': 'dht11',
                   'tags': {'host': host},
-                  'time': datetime.now().isoformat(),
+                  'time': datetime.utcnow().isoformat(),
                   'fields': {'temperature': temp, 'humidity': humi}}]
     print(json_body)
     print(client.write_points(json_body))
