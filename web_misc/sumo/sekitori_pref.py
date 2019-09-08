@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os.path
 import pickle
 import time
@@ -7,6 +6,8 @@ import japanmap as jp
 from matplotlib import pyplot as plt
 from matplotlib import cm
 from matplotlib.font_manager import FontProperties
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+import numpy as np
 import requests
 
 
@@ -22,7 +23,7 @@ def pref_check(pid):
             for td in tr.find_all('td'):
                 names.append(td.text.strip(" \n"))
                 break
-    return zip(ranks, names)
+    return list(zip(ranks, names))
 
 
 def sumo_wrestler(enforce=False):
@@ -39,17 +40,6 @@ def sumo_wrestler(enforce=False):
     return sumo
 
 
-def get_japanmap():
-    with open('japan.p2.pkl', 'rw') as f:
-        return pickle.load(f)
-
-
-def color_mag(sumo):
-    a = [len(s) for s in sumo]
-    max_, min_ = max(a), min(a)
-    return cm.hot(map(lambda c: 1-float(c - min_)/(max_+1.0), a))
-
-
 def sekitori(sumo):
     seki = [[] for i in range(47)]
     for i in range(47):
@@ -59,33 +49,57 @@ def sekitori(sumo):
                 seki[i] = seki[i] + [(r, p)]
     for i, s in enumerate(seki):
         if s:
-            print jp.pref_names[i + 1]
+            print(jp.pref_names[i + 1])
             for r, p in s:
-                print r, p
-            print
+                print(r, p)
+            print('\n')
     return seki
 
 
-def draw_prefs(sumo, is_sekitori=True):
-    if is_sekitori:
-        sumo = sekitori(sumo_wrestler())
-    pts = jp.pref_points(get_japanmap())
-    c = color_mag(sumo)
+def draw_pref_regions(dist, max_card, cmap):
+    pts = jp.pref_points(jp.get_data())
+    c = cmap(list(map(lambda c: c/max_card, dist)))
     for i in range(47):
         poly = plt.Polygon(pts[i], ec='k', fc=c[i], lw=0.5)
         plt.gca().add_patch(poly)
-
-    plt.gca().set_aspect('equal')
-    plt.axis('off')
     plt.autoscale()
-    fpath = '/usr/share/fonts/truetype/fonts-japanese-gothic.ttf'
+
+
+def draw_color_bar(cmap, max_card):
+    sm = cm.ScalarMappable(cmap=cmap)
+    sm._A = []
+    divider = make_axes_locatable(plt.gca())
+    cax = divider.append_axes('right', size='2%', pad='1%')
+    cbar = plt.colorbar(sm, cax=cax, ticks=np.linspace(0, 1, max_card+1))
+    cbar.ax.set_yticklabels(range(max_card+1))
+
+
+def draw_title(is_sekitori):
+    fpath = '/System/Library/Fonts/ヒラギノ丸ゴ ProN W4.ttc'
     fp = FontProperties(fname=fpath)
     if is_sekitori:
-        plt.gca().set_title(u'関取', fontproperties=fp)
+        plt.gca().set_title(u'関取', fontproperties=fp, fontsize=16)
         plt.savefig('sumo_sekitori_pref.png', bbox_inches='tight')
     else:
-        plt.gca().set_title(u'すべての力士', fontproperties=fp)
+        plt.gca().set_title(u'すべての力士', fontproperties=fp, fontsize=16)
         plt.savefig('sumo_pref.png', bbox_inches='tight')
+
+
+def draw_prefs(sumo, is_sekitori=True):
+    plt.clf()
+    plt.gca().set_aspect('equal')
+    plt.axis('off')
+    cmap = cm.autumn_r
+
+    if is_sekitori:
+        sumo = sekitori(sumo_wrestler())
+
+    distribution = [len(s) for s in sumo]
+    max_card = max(distribution)
+
+    draw_pref_regions(distribution, max_card, cmap)
+    draw_color_bar(cmap, max_card)
+    draw_title(is_sekitori)
 
 
 if __name__ == '__main__':
