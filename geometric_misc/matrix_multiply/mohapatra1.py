@@ -29,12 +29,12 @@ def mohapatra(a, b):
     p = int(np.math.log10((10**(2*m)-1)*n)) + 1
     pad1, pad2 = 10**p, 10**(p*(n-1))
 
-    c = [int(sum(a[i][j]*(pad2/(pad1**j)) for j in dom)) for i in dom]
-    d = [int(sum(b[-i-1][j]*(pad2/(pad1**i)) for i in dom)) for j in dom]
+    c = [int(sum(a[i][j]*(pad2//(pad1**j)) for j in dom)) for i in dom]
+    d = [int(sum(b[-i-1][j]*(pad2//(pad1**i)) for i in dom)) for j in dom]
 
     e = np.zeros((n, n))
     for i, j in product(dom, repeat=2):
-        e[i][j] = int(c[i]*d[j]/pad2) % pad1
+        e[i][j] = int(c[i]*d[j]//pad2) % pad1
     return e
 
 

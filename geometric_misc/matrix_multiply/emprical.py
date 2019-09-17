@@ -6,29 +6,24 @@ import numpy as np
 
 
 def mohapatra(a, b):
-    n = min(a.shape)
-    dom = list(range(n))
-
+    n, dom = min(a.shape), list(range(a.shape))
     m = int(np.math.log10(max(a.max(), b.max()))) + 1
     p = int(np.math.log10((10**(2*m)-1)*n)) + 1
     pad1, pad2 = 10**p, 10**(p*(n-1))
 
-    c = [int(sum(a[i,j]*(pad2/(pad1**j)) for j in dom)) for i in dom]
-    d = [int(sum(b[-i-1,j]*(pad2/(pad1**i)) for i in dom)) for j in dom]
-
+    c = [int(sum(a[i,j]*(pad2//(pad1**j)) for j in dom)) for i in dom]
+    d = [int(sum(b[-i-1,j]*(pad2//(pad1**i)) for i in dom)) for j in dom]
     e = np.zeros((n, n))
     for i, j in product(dom, repeat=2):
-        e[i,j] = int(c[i]*d[j]/pad2) % pad1
+        e[i,j] = int(c[i]*d[j]//pad2) % pad1
     return e
 
 
-def ijk(a, b):
+def school(a, b):
     n = min(a.shape)
     c = np.zeros((n, n))
-    for i in range(n):
-        for j in range(n):
-            for k in range(n):
-                c[i,j] += a[i,k] * b[k,j]
+    for i, j, k in product(range(n), repeat=3):
+        c[i,j] += a[i,k] * b[k,j]
     return c
 
 
@@ -42,7 +37,7 @@ def _test2():
             s = time()
             mohapatra(a, a)
             e = time()
-            ijk(a, a)
+            school(a, a)
             ti[i] += time() - e
             tm[i] += e - s
         tm[i] /= trials
