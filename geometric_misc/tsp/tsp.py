@@ -1,5 +1,4 @@
 from abc import ABCMeta, abstractmethod
-from matplotlib import pyplot as plt
 import networkx as nx
 import numpy as np
 from pulp import LpVariable, LpProblem, lpSum, lpDot
@@ -13,9 +12,9 @@ class _tsp(metaclass=ABCMeta):
     """ TSP interface (one shot) """
     def __init__(self, P):
         g = self._associated_graph(P)
-        # print(type(self).__name__)
+        print(type(self).__name__)
         self.__tour = self._get_tour(g)
-        # g.clear()
+        g.clear()
 
     @staticmethod
     def _associated_graph(P):
@@ -57,9 +56,8 @@ class ordinary_mtz(_tsp):
     def _associated_graph(self, P):
         g = super()._associated_graph(P)
         g.nodes[0]['v'] = LpVariable('u0')
-        for u in g:
-            if u != 0:
-                g.nodes[u]['v'] = LpVariable('u%d' % (u), 1, len(P)-1)
+        for i in range(1, len(P)):
+            g.nodes[i]['v'] = LpVariable('u%d' % (i), 1, len(P)-1)
         return g
 
     def _get_tour(self, g):
@@ -88,27 +86,25 @@ class enhanced_mtz(ordinary_mtz):
         Operations Research Letters, 10(1), pp. 27--36.
 
         In addition, we would like to apply constraints around the oringin.
-        See following web-slide (p. 33) due to M. Kubo.
+        See following web-slide (p. 33) written by M. Kubo.
 
             https://www.slideshare.net/MikioKubo/gurobi-python
     """
     def _mtz_formulation(self, g):
-        n, lp = g.order(), self._init_formulation(g)
+        lp, n = self._init_formulation(g), g.order()
         lp += g.nodes[0]['v'] == 0
         for i, j in g.edges:
             if 0 not in (i, j):
                 lp += (g.nodes[i]['v'] - g.nodes[j]['v'] + (n-1)*g[i][j]['v']
                        + (n-3)*g[j][i]['v'] <= n-2)
-        for i in g:
-            if i == 0:
-                continue
+        for i in range(1, g.order()):
             lp += 2 - g[0][i]['v'] + (n-3)*g[i][0]['v'] <= g.nodes[i]['v']
             lp += g.nodes[i]['v'] <= n-2 + g[i][0]['v'] - (n-3)*g[0][i]['v']
         return lp
 
 
 class lazy_generation(_tsp):
-    """ A subtour elimination by using lazy constraint generation: cf.
+    """ A subtour elimination by using lazy generation: cf.
 
         https://cnc-selfbuild.blogspot.com/2019/06/tsp-lp-lazy-subtour-elimination.html
     """
@@ -119,7 +115,7 @@ class lazy_generation(_tsp):
             subtours = self.__get_subtours(g)
         return subtours.pop()
 
-    def _build_and_scrap(self, g, lp, subtours=None):
+    def _build_and_scrap(self, g, lp, subtours):
         if subtours is not None:
             for s in subtours:
                 if len(s) > g.order() / 2:
@@ -129,7 +125,7 @@ class lazy_generation(_tsp):
 
     @staticmethod
     def _bridging(g, lp, s):
-        lp += lpSum(g[u][v]['v'] for u in s for v in g.predecessors(u)
+        lp += lpSum(g[u][v]['v'] for u in s for v in g.successors(u)
                     if v not in s) >= 1
 
     @staticmethod
@@ -139,7 +135,7 @@ class lazy_generation(_tsp):
             if visited[v]:
                 continue
             tour = []
-            while v not in tour:
+            while not visited[v]:
                 tour.append(v)
                 visited[v] = True
                 v = next(w for w in succ(v) if g[v][w]['v'].varValue > 0)
@@ -148,7 +144,7 @@ class lazy_generation(_tsp):
 
 
 class lazy_generation2(lazy_generation):
-    """ A subtour elimination by using lazy constraint generation: cf.
+    """ A subtour elimination by using lazy generation: cf.
 
         P. Ulrich, S. Rostislav: (2017)
             "Generating subtour elimination constraints for the TSP from
@@ -173,12 +169,12 @@ class lazy_generation2(lazy_generation):
             Journal of the Operations Research society of America, 2(4),
             pp. 393--410.
         """
-        t = s[1:] + [s[0]]
-        lp += lpSum(g[u][v]['v'] for u, v in zip(s, t)) <= len(s) - 1
-        lp += lpSum(g[v][u]['v'] for u, v in zip(s, t)) <= len(s) - 1
+        lp += lpSum(g[u][v]['v'] for u, v in g.subgraph(s).edges) <= len(s)-1
 
 
 def draw(P, tours):
+    from matplotlib import pyplot as plt
+    assert(len(tours) <= 6)
     _, axs = plt.subplots(1, len(tours), figsize=(12, 4))
     n, styles = len(P), ('go-', 'bo-', 'ro-', 'gx-', 'bx-', 'rx-')
     for t, ax, style in zip(tours, axs, styles):
@@ -188,6 +184,8 @@ def draw(P, tours):
         ax.set_aspect('equal')
         ax.axis('off')
     plt.tight_layout()
+    # plt.savefig('tsp_lazy_generation_%d.png' % len(P), bbox_inches='tight')
+    plt.show()
 
 
 def gen(n=10, seed=None):
@@ -201,10 +199,23 @@ def length(P, tour):
                for i in range(n))
 
 
+def eval(algo, pts):
+    from time import time
+    start = time()
+    a = algo(pts)
+    return a.tour, time() - start
+
+
 if __name__ == '__main__':
     P = gen(15)
-    m, l1, l2 = enhanced_mtz(P), lazy_generation(P), lazy_generation2(P)
-#    m, l1, l2 = ordinary_mtz(P), lazy_generation(P), lazy_generation2(P)
-    draw(P, [m.tour, l1.tour, l2.tour])
-    print(length(P, m.tour), length(P, l1.tour), length(P, l2.tour))
-    plt.show()
+    m1, m2, lz = ordinary_mtz(P), enhanced_mtz(P), lazy_generation(P)
+    print(length(P, m1.tour), length(P, m2.tour), length(P, lz.tour))
+    draw(P, [m1.tour, m2.tour, lz.tour])
+
+#    n = 100
+#    P = gen(n)
+#    l1, t1 = eval(lazy_generation, P)
+#    l2, t2 = eval(lazy_generation2, P)
+#    print(t1, t2)
+#    print(length(P, l1), length(P, l2))
+#    draw(P, [l1, l2])
