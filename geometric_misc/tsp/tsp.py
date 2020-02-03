@@ -19,9 +19,9 @@ class _tsp(metaclass=ABCMeta):
     @staticmethod
     def _associated_graph(P):
         g = nx.complete_graph(len(P), create_using=nx.DiGraph)
-        for u, v in g.edges:
-            g[u][v]['v'] = LpVariable('x%d,%d' % (u, v), cat='Binary')
-            g[u][v]['w'] = np.linalg.norm(P[u] - P[v])
+        for i, j in g.edges:
+            g[i][j]['v'] = LpVariable('x%d,%d' % (i, j), cat='Binary')
+            g[i][j]['w'] = np.linalg.norm(P[i] - P[j])
         return g
 
     @abstractmethod
@@ -37,12 +37,12 @@ class _tsp(metaclass=ABCMeta):
         lp = LpProblem()
         lp += lpSum(lpDot(nx.get_edge_attributes(g, 'v').values(),
                           nx.get_edge_attributes(g, 'w').values()))
-        for v in g:
-            lp += lpSum(g[v][w]['v'] for w in g.successors(v)) == 1
-            lp += lpSum(g[u][v]['v'] for u in g.predecessors(v)) == 1
-        for u, v in g.edges:    # this is for Dantzig-Fulkerson-Johnson.
-            if u < v:
-                lp += g[u][v]['v'] + g[v][u]['v'] <= 1
+        for i in g:
+            lp += lpSum(g[i][j]['v'] for j in g.successors(i)) == 1
+            lp += lpSum(g[j][i]['v'] for j in g.predecessors(i)) == 1
+        for i, j in g.edges:    # this is for Dantzig-Fulkerson-Johnson.
+            if i < j:
+                lp += g[i][j]['v'] + g[j][i]['v'] <= 1
         return lp
 
 
@@ -63,8 +63,8 @@ class ordinary_mtz(_tsp):
     def _get_tour(self, g):
         self._mtz_formulation(g).solve()
         tour = [0] * g.order()
-        for v in range(1, g.order()):
-            tour[int(g.nodes[v]['v'].varValue)] = v
+        for i in range(1, g.order()):
+            tour[int(g.nodes[i]['v'].varValue)] = i
         return tour
 
     def _mtz_formulation(self, g):
@@ -118,15 +118,14 @@ class lazy_generation(_tsp):
     def _build_and_scrap(self, g, lp, subtours):
         if subtours is not None:
             for s in subtours:
-                if len(s) > g.order() / 2:
-                    continue
-                self._bridging(g, lp, s)
+                if len(s) < g.order() / 2:
+                    self._bridging(g, lp, s)
         lp.solve()
 
     @staticmethod
     def _bridging(g, lp, s):
-        lp += lpSum(g[u][v]['v'] for u in s for v in g.successors(u)
-                    if v not in s) >= 1
+        lp += lpSum(g[i][j]['v'] for i in s for j in g.successors(i)
+                    if j not in s) >= 1
 
     @staticmethod
     def __get_subtours(g):
@@ -154,7 +153,7 @@ class lazy_generation2(lazy_generation):
     def _build_and_scrap(self, g, lp, subtours=None):
         if subtours is not None:
             for s in subtours:
-                if len(s) < (2*g.order() + 1) / 2:
+                if len(s) < (2*g.order() + 1) / 3:
                     self._disconnecting(g, lp, s)
                 else:
                     self._bridging(g, lp, s)
@@ -212,8 +211,7 @@ if __name__ == '__main__':
     print(length(P, m1.tour), length(P, m2.tour), length(P, lz.tour))
     draw(P, [m1.tour, m2.tour, lz.tour])
 
-#    n = 100
-#    P = gen(n)
+#    P = gen(100)
 #    l1, t1 = eval(lazy_generation, P)
 #    l2, t2 = eval(lazy_generation2, P)
 #    print(t1, t2)
