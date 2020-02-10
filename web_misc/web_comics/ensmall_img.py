@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
 import os
-import shutil
 import sys
 from glob import glob
 import zipfile
@@ -17,7 +15,7 @@ img_suffix = ".jpg.png.gif.jpeg"
 
 fs, zs = [], []
 for f in glob(target_string):
-    print unicode(f, 'cp932', 'ignore')
+    print(f)
     fs.append(f)
     with zipfile.ZipFile(f) as zf:
         fn, sn = os.path.splitext(f)
@@ -27,15 +25,15 @@ for f in glob(target_string):
         size = (1200, 800)
         for e in tqdm(zf.infolist()):
             fn, sn = os.path.splitext(e.filename)
-            if sn not in img_suffix:
+            if len(sn) < 1 or sn not in img_suffix or '__' in fn:
                 continue
+            of = e.filename.split('/')[-1]
             with zf.open(e) as i:
                 img = Image.open(i).convert('RGB')
                 img.thumbnail(size)
-                of = e.filename
                 if sn != '.jpg':
-                    of = fn + '.jpg'
-                img.save(of, 'JPEG')
+                    of = fn.split('/')[-1] + '.jpg'
+                img.save(of, format='JPEG')
                 tl.append(of)
                 ozf.write(of)
         ozf.close()

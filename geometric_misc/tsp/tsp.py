@@ -12,7 +12,7 @@ class _tsp(metaclass=ABCMeta):
     """ TSP interface (one shot) """
     def __init__(self, P):
         g = self._associated_graph(P)
-        print(type(self).__name__)
+        # print(type(self).__name__)
         self.__tour = self._get_tour(g)
         g.clear()
 
@@ -35,8 +35,8 @@ class _tsp(metaclass=ABCMeta):
     @staticmethod
     def _init_formulation(g):
         lp = LpProblem()
-        lp += lpSum(lpDot(nx.get_edge_attributes(g, 'v').values(),
-                          nx.get_edge_attributes(g, 'w').values()))
+        lp += lpDot(nx.get_edge_attributes(g, 'v').values(),
+                    nx.get_edge_attributes(g, 'w').values())
         for i in g:
             lp += lpSum(g[i][j]['v'] for j in g.successors(i)) == 1
             lp += lpSum(g[j][i]['v'] for j in g.predecessors(i)) == 1
@@ -55,7 +55,6 @@ class ordinary_mtz(_tsp):
     """
     def _associated_graph(self, P):
         g = super()._associated_graph(P)
-        g.nodes[0]['v'] = LpVariable('u0')
         for i in range(1, len(P)):
             g.nodes[i]['v'] = LpVariable('u%d' % (i), 1, len(P)-1)
         return g
@@ -69,7 +68,6 @@ class ordinary_mtz(_tsp):
 
     def _mtz_formulation(self, g):
         lp, n = self._init_formulation(g), g.order()
-        lp += g.nodes[0]['v'] == 0
         for i, j in g.edges:
             if 0 in (i, j):
                 continue
@@ -92,7 +90,6 @@ class enhanced_mtz(ordinary_mtz):
     """
     def _mtz_formulation(self, g):
         lp, n = self._init_formulation(g), g.order()
-        lp += g.nodes[0]['v'] == 0
         for i, j in g.edges:
             if 0 not in (i, j):
                 lp += (g.nodes[i]['v'] - g.nodes[j]['v'] + (n-1)*g[i][j]['v']
@@ -116,10 +113,9 @@ class lazy_generation(_tsp):
         return subtours.pop()
 
     def _build_and_scrap(self, g, lp, subtours):
-        if subtours is not None:
-            for s in subtours:
-                if len(s) < g.order() / 2:
-                    self._bridging(g, lp, s)
+        for s in subtours:
+            if len(s) < g.order() / 2:
+                self._bridging(g, lp, s)
         lp.solve()
 
     @staticmethod
@@ -129,16 +125,14 @@ class lazy_generation(_tsp):
 
     @staticmethod
     def __get_subtours(g):
-        subtours, visited, succ = [], {v: False for v in g}, g.successors
-        for v in g:
-            if visited[v]:
-                continue
-            tour = []
-            while not visited[v]:
-                tour.append(v)
-                visited[v] = True
-                v = next(w for w in succ(v) if g[v][w]['v'].varValue > 0)
-            subtours.append(tour)
+        subtours, visited, succ = [], {i: False for i in g}, g.successors
+        for i in g:
+            if not visited[i]:
+                subtours.append([])
+                while not visited[i]:
+                    subtours[-1].append(i)
+                    visited[i] = True
+                    i = next(j for j in succ(i) if g[i][j]['v'].varValue > 0)
         return subtours
 
 
@@ -150,17 +144,16 @@ class lazy_generation2(lazy_generation):
              pure integer solutions"
         Central European journal of operations research, 25(1), pp. 231--260.
     """
-    def _build_and_scrap(self, g, lp, subtours=None):
-        if subtours is not None:
-            for s in subtours:
-                if len(s) < (2*g.order() + 1) / 3:
-                    self._disconnecting(g, lp, s)
-                else:
-                    self._bridging(g, lp, s)
+    def _build_and_scrap(self, g, lp, subtours):
+        for s in subtours:
+            if len(s) < (2*g.order() + 1) / 3:
+                self._acycling(g, lp, s)
+            else:
+                self._bridging(g, lp, s)
         lp.solve()
 
     @staticmethod
-    def _disconnecting(g, lp, s):
+    def _acycling(g, lp, s):
         """ Traditional subtour elimination constraints due to
 
             G. Dantzig, R. Fulkerson, S. Johnson: (1954)
@@ -168,7 +161,7 @@ class lazy_generation2(lazy_generation):
             Journal of the Operations Research society of America, 2(4),
             pp. 393--410.
         """
-        lp += lpSum(g[u][v]['v'] for u, v in g.subgraph(s).edges) <= len(s)-1
+        lp += lpSum(g[i][j]['v'] for i, j in g.subgraph(s).edges) <= len(s)-1
 
 
 def draw(P, tours):
@@ -207,7 +200,7 @@ def eval(algo, pts):
 
 if __name__ == '__main__':
     P = gen(15)
-    m1, m2, lz = ordinary_mtz(P), enhanced_mtz(P), lazy_generation(P)
+    m1, m2, lz = ordinary_mtz(P), enhanced_mtz(P), lazy_generation2(P)
     print(length(P, m1.tour), length(P, m2.tour), length(P, lz.tour))
     draw(P, [m1.tour, m2.tour, lz.tour])
 
