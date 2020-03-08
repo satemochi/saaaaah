@@ -115,7 +115,7 @@ class lazy_generation(_tsp):
 
     def _build_and_scrap(self, g, lp, subtours):
         for s in subtours:
-            if len(s) < g.order() / 2:
+            if len(s) < g.order() / 2 + 1:
                 self._bridging(g, lp, s)
         lp.solve()
 
