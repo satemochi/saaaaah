@@ -11,8 +11,9 @@ __all__ = ['ordinary_mtz', 'enhanced_mtz',
 class _tsp(metaclass=ABCMeta):
     """ TSP interface (one shot) """
     def __init__(self, P):
-        g = self._associated_graph(P)
         # print(type(self).__name__)
+        print(type(self).__name__)
+        g = self._associated_graph(P)
         self.__tour = self._get_tour(g)
         g.clear()
 
@@ -55,14 +56,14 @@ class ordinary_mtz(_tsp):
     """
     def _associated_graph(self, P):
         g = super()._associated_graph(P)
-        for i in range(1, len(P)):
+        for i in g[0]:
             g.nodes[i]['v'] = LpVariable('u%d' % (i), 1, len(P)-1)
         return g
 
     def _get_tour(self, g):
         self._mtz_formulation(g).solve()
         tour = [0] * g.order()
-        for i in range(1, g.order()):
+        for i in g[0]:
             tour[int(g.nodes[i]['v'].varValue)] = i
         return tour
 
@@ -94,7 +95,7 @@ class enhanced_mtz(ordinary_mtz):
             if 0 not in (i, j):
                 lp += (g.nodes[i]['v'] - g.nodes[j]['v'] + (n-1)*g[i][j]['v']
                        + (n-3)*g[j][i]['v'] <= n-2)
-        for i in range(1, g.order()):
+        for i in g[0]:
             lp += 2 - g[0][i]['v'] + (n-3)*g[i][0]['v'] <= g.nodes[i]['v']
             lp += g.nodes[i]['v'] <= n-2 + g[i][0]['v'] - (n-3)*g[0][i]['v']
         return lp

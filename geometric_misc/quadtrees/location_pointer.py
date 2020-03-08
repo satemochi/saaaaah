@@ -23,7 +23,7 @@ class location_pointer:
         self.__preprocessing()
 
     def __preprocessing(self):
-        for i in xrange(self.maxlevel):
+        for i in range(self.maxlevel):
             self._x = (self._x << 2) + 1
             self._y = (self._y << 2) + 2
         self.delta[self.W] = self._x
@@ -80,7 +80,7 @@ class location_pointer:
     def __to_binary(self, loc):
         x, y, i = 0, 0, 0
         while loc > 0:
-            digit = loc % 10
+            digit = int(loc % 10)
             if digit & 1: x += 1 << i
             if digit > 1: y += 1 << i
             loc, i = (loc - digit) / 10, i + 1
@@ -113,9 +113,9 @@ class location_pointer:
 
 if __name__ == '__main__':
     n = 200
-    print n
+    print(n)
     locp = location_pointer()
-    print locp.neighbor(n, 2)
-    print locp.parent(n)
-    print locp.children(n)
+    print(locp.neighbor(n, 2))
+    print(locp.parent(n))
+    print(locp.children(n))
     help(location_pointer)

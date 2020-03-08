@@ -1,5 +1,5 @@
-import numpy as np
 from matplotlib import pyplot as plt
+import numpy as np
 from location_pointer import location_pointer
 
 
@@ -156,7 +156,7 @@ class node:
 
     def plot(self):
         self.sq.plot()
-        if all(self.c[i] is None for i in xrange(4)):
+        if all(self.c[i] is None for i in range(4)):
             plt.scatter(self.qt.p[self.bep[0]:self.bep[1], 0],
                         self.qt.p[self.bep[0]:self.bep[1], 1],
                         color='g', s=16, zorder=100)
@@ -170,17 +170,18 @@ class node:
             if c and c.sq.containing((x, y)):
                 return c.find_leaf(x, y)
         # then now we are on a leaf or highest inner node containing (x, y)
-        print self.qt.p[self.bep[0]:self.bep[1]]
-        print str(self)
+        print(self.qt.p[self.bep[0]:self.bep[1]])
+        print(self)
         if self.sq.L > 1 and self.bep[1] - self.bep[0] > self.qt.k:
-            print 'inner'
+            print('inner')
         else:
-            print 'leaf'
-        print self.__neighbors()
+            print('leaf')
+        print(self.__neighbors())
 
     def __neighbors(self):
-        base = [self.qt.lt.neighbor(self.lc, i) for i in xrange(8)]
+        base = [self.qt.lt.neighbor(self.lc, i) for i in range(8)]
         B = [c if len(str(c)) <= self.h else None for c in base]
+        print('0(E), 1(NE), 2(N), 3(NW), 4(W), 5(SW), 6(S), 7(SE)')
         return [str(c).zfill(self.h)
                 if str(c).zfill(self.h) in self.qt.loc else None for c in B]
 
@@ -264,7 +265,7 @@ qt = None
 
 def onclick(event):
     qt.find_leaf(event.xdata, event.ydata)
-    print
+    print()
 
 
 if __name__ == '__main__':
