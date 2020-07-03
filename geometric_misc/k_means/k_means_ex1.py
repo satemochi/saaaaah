@@ -28,7 +28,9 @@ def _get_centers(cluster, k):
     m = {i: (0, 0, 0) for i in range(k)}
     for (x, y), i in cluster.items():
         m[i] = (m[i][0]+x, m[i][1]+y, m[i][2]+1)
-    return {i: (m[i][0]/m[i][2], m[i][1]/m[i][2]) for i in m}
+    return {i: (m[i][0]/m[i][2], m[i][1]/m[i][2])
+        if m[i][2] else (float('inf'), float('inf')) for i in m}
+
     
 
 def _norm(x0, y0, x1, y1):
