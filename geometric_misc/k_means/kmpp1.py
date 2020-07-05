@@ -1,10 +1,34 @@
-from random import random, randint, seed
+from random import random, randint, seed, uniform
 from matplotlib import pyplot as plt
 from matplotlib.colors import TABLEAU_COLORS
 
 
-def k_means(pts, k, s=None):
-    clusters = _random_arrange(pts, k, s)
+def k_means_pp_centers(pts, k):
+    centers = [pts[randint(0, len(pts)-1)]]
+    while len(centers) < k:
+        centers.append(pts[_pickup(_get_distribution(pts, centers))])
+    return {p : min((_norm(*p, *pc), i) for i, pc in enumerate(centers))[1]
+            for p in pts}
+
+
+def _pickup(dist):
+    if (pivot := uniform(0, dist[-1][0])) < dist[0][0]:
+        return 0
+    for i in range(1, len(dist)):
+        if dist[i-1][0] < pivot and pivot <= dist[i][0]:
+            return dist[i][1]
+
+
+def _get_distribution(pts, centers):
+    s = [(min(_norm(*p, *pc) for pc in centers), i) for i, p in enumerate(pts)]
+    for i in range(1, len(s)):
+        s[i] = (s[i-1][0]+s[i][0], s[i][1])
+    return s
+
+
+def k_means(pts, k, clusters=None, s=None):
+    if clusters is None:
+        clusters = _random_arrange(pts, k, s)
     while _rearrange(clusters, k):
         pass
     return clusters
@@ -41,8 +65,10 @@ def gen(n, s):
 
 
 if __name__ == '__main__':
-    n, k, s = 50, 5, 0
-    clusters = k_means(gen(n, s), k, s)
+    n, k, s = 200, 5, 0
+    pts = gen(n, s)
+#    clusters = k_means(pts, k, s=s)
+    clusters = k_means(pts, k, clusters=k_means_pp_centers(pts, k))
 
     colors = list(TABLEAU_COLORS.values())
     for i in range(k):
@@ -51,5 +77,5 @@ if __name__ == '__main__':
 
     plt.gca().set_aspect('equal')
     plt.tight_layout()
-    #plt.savefig('k_means_ex1.png', bbox_inches='tight')
+    plt.savefig('k_means_ex1.png', bbox_inches='tight')
     plt.show()
