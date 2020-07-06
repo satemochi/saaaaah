@@ -4,13 +4,13 @@ from matplotlib.colors import TABLEAU_COLORS
 
 
 def k_means(pts, k, s=None):
-    clusters = _random_arrange(pts, k, s)
+    clusters = _arrange_randomly(pts, k, s)
     while _rearrange(clusters, k):
         pass
     return clusters
 
 
-def _random_arrange(pts, k, s):
+def _arrange_randomly(pts, k, s):
     seed(s)
     return {p: randint(0, k-1) for p in pts}
 
@@ -51,5 +51,5 @@ if __name__ == '__main__':
 
     plt.gca().set_aspect('equal')
     plt.tight_layout()
-    #plt.savefig('k_means_ex1.png', bbox_inches='tight')
+    # plt.savefig('k_means_ex1.png', bbox_inches='tight')
     plt.show()
