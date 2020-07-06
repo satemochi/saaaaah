@@ -1,7 +1,8 @@
-from random import randint, random, seed, uniform
+from random import randint, seed, uniform
 
 
-def k_means_pp_init_clusters(pts, k):
+def k_means_pp_init_clusters(pts, k, s=None):
+    seed(s)
     centers = [pts[randint(0, len(pts)-1)]]
     while len(centers) < k:
         centers.append(pts[_pickup(_get_distribution(pts, centers))])
@@ -10,17 +11,14 @@ def k_means_pp_init_clusters(pts, k):
 
 
 def _pickup(dist):
-    pivot = uniform(0, dist[-1][0])
-    for supremum, cluster_id in dist:
-        if pivot <= supremum:
-            return cluster_id
+    pin = uniform(0, dist[-1][0])
+    return next(cluster_id for supremum, cluster_id in dist if pin <= supremum)
 
 
 def _get_distribution(pts, centers):
-    s = [(min(_norm(*p, *pc) for pc in centers), i) for i, p in enumerate(pts)]
-    for i in range(1, len(s)):
-        s[i] = (s[i-1][0]+s[i][0], s[i][1])
-    return s
+    acc = (0, 0)
+    return [acc:=(acc[0]+min(_norm(*p, *pc) for pc in centers), i)
+            for i, p in enumerate(pts)]
 
 
 def _norm(x0, y0, x1, y1):
@@ -57,6 +55,7 @@ def _get_centers(cluster, k):
 
 
 def gen(n, s):
+    from random import random
     seed(s)
     return [(random(), random()) for i in range(n)]
 
@@ -67,7 +66,7 @@ if __name__ == '__main__':
     n, k, s = 200, 5, 0
     pts = gen(n, s)
     # clusters = k_means(pts, k, s=s)
-    clusters = k_means(pts, k, clusters=k_means_pp_init_clusters(pts, k))
+    clusters = k_means(pts, k, clusters=k_means_pp_init_clusters(pts, k, s))
 
     colors = list(TABLEAU_COLORS.values())
     for i in range(k):
