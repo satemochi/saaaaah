@@ -1,24 +1,14 @@
-from random import randint, seed, uniform
+from random import randint, seed, choices
 
 
 def k_means_pp_init_clusters(pts, k, s=None):
     seed(s)
     centers = [pts[randint(0, len(pts)-1)]]
     while len(centers) < k:
-        centers.append(pts[_pickup(_get_distribution(pts, centers))])
+        w = [min(_norm(*p, *pc) for pc in centers) for p in pts]
+        centers.append(pts[choices(range(len(pts)), weights=w)[0]])
     return {p: min((_norm(*p, *pc), i) for i, pc in enumerate(centers))[1]
             for p in pts}
-
-
-def _pickup(dist):
-    pin = uniform(0, dist[-1][0])
-    return next(cluster_id for supremum, cluster_id in dist if pin <= supremum)
-
-
-def _get_distribution(pts, centers):
-    acc = (0, 0)
-    return [acc:=(acc[0]+min(_norm(*p, *pc) for pc in centers), i)
-            for i, p in enumerate(pts)]
 
 
 def _norm(x0, y0, x1, y1):
@@ -70,5 +60,5 @@ if __name__ == '__main__':
 
     plt.gca().set_aspect('equal')
     plt.tight_layout()
-    plt.savefig('k_means_pp_ex1.png', bbox_inches='tight')
+    plt.savefig('k_means_pp_ex2.png', bbox_inches='tight')
     plt.show()

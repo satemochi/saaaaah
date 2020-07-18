@@ -66,9 +66,11 @@ class circle:
 
         return (-g, -f, (f*f + g*g - c)**0.5)
 
-    def draw(self, c='g'):
+    def draw(self, c='g', ax=None):
+        if ax is None:
+            ax = plt.gca()
         c = plt.Circle((self.__cx, self.__cy), self.__r, fill=False, color=c)
-        plt.gca().add_artist(c)
+        ax.add_artist(c)
 
     def contains(self, x, y):
         return ((x-self.__cx)**2 + (y-self.__cy)**2)**0.5 <= self.__r + 1e-9
@@ -76,30 +78,35 @@ class circle:
     def pts(self):
         return set(self.__pts)
 
+    @property
+    def center(self):
+        return (self.__cx, self.__cy)
 
-def welzl(pts):
+    @property
+    def radius(self):
+        return self.__r
+
+
+def welzl(p, r=set()):
     """ Find the smallest enclosing circle for given a set of points in plane.
         from https://en.wikipedia.org/wiki/Smallest-circle_problem
-    """
-    return _welzl(set(pts), set())
-
-
-def _welzl(p, r):
-    """ Find the circle in recursively
-
+    
         input:  Finite sets P and R of points in the plane |R| <= 3.
         output: Minimal disk enclosing P with R on the boundary.
     """
     if len(p) == 0 or len(r) == 3:
         return circle(list(r))
     q = sample(p, 1)[0]   # randomly and uniformly
-    d = _welzl(p - {q}, r)
+    d = welzl(set(p) - {q}, r)
     if d.contains(*q):
         return d
-    return _welzl(p - {q}, r | {q})
+    return welzl(set(p) - {q}, r | {q})
 
 
 def msw(pts):
+    """ Matousek, Sharir, Welzl's Algorithm for the minimum-circle problem """
+    if len(pts) <= 3:
+        return circle(pts)
     return _msw(set(pts), set(sample(pts, 3)))
 
 
@@ -113,7 +120,7 @@ def _msw(p, r):
     """
     if len(p) == 0:
         return circle(list(r))
-    q = sample(p, 1)[0]   # randomly and uniformly
+    q = sample(p, 1)[0]
     d = _msw(p - {q}, r)
     if d.contains(*q):
         return d
@@ -130,24 +137,12 @@ if __name__ == '__main__':
     pts = gen()
     plt.scatter([x for x, _ in pts], [y for _, y in pts])
 
-#    cx, cy, r = circle3(pts)
-#    plt.gca().add_artist(plt.Circle((cx, cy), r, color='g', fill=False))
-
-#    circle(pts).draw()
-
-#    welzl(pts).draw()
+    # welzl(pts).draw()
     msw(pts).draw()
 
-    # cx, cy, r = circle2(pts[:2])
-    # plt.gca().add_artist(plt.Circle((cx, cy), r, color='r', fill=False))
-
-    # print(circle1(pts[:1]))
-
     plt.gca().set_aspect('equal')
-#    plt.gca().set_xlim(0, 1)
-#    plt.gca().set_ylim(0, 1)
     plt.gca().set_xlim(-0.25, 1.25)
     plt.gca().set_ylim(-0.25, 1.25)
     plt.tight_layout()
-#    plt.savefig('smallest_enclosing_circle.png', bbox_inches='tight')
+    # plt.savefig('smallest_enclosing_circle.png', bbox_inches='tight')
     plt.show()
