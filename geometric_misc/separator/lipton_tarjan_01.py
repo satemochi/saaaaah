@@ -1,9 +1,7 @@
 from itertools import combinations
-from math import sqrt
 from random import random, sample, seed
 from matplotlib import pyplot as plt
 import networkx as nx
-import numpy as np
 import triangle
 
 
@@ -90,10 +88,13 @@ class dt:
     def __disjoint_cycle(self, x, y):
         xp = nx.shortest_path(self._bfs, source=self._r, target=x)
         yp = nx.shortest_path(self._bfs, source=self._r, target=y)
+        lowest_common = self._r
         for i, (xi, yi) in enumerate(zip(xp[1:], yp[1:]), start=1):
-            if xi != yi:
+            if xi == yi:
+                lowest_common = xi
+            else:
                 break
-        return [self._r] + xp[i:] + list(reversed(yp[i:]))
+        return [lowest_common] + xp[i:] + list(reversed(yp[i:]))
 
     def draw_planar_graph(self):
         nx.draw(self.planar_graph, self.vertices, node_size=20, alpha=0.25)
@@ -103,23 +104,24 @@ class dt:
         pos = {f: self.__c(f) for f in self._d}
         dummy = (float('inf'), float('inf'), float('inf'))
         el = [e for e in self._d.edges if dummy not in e]
-        nx.draw(self._d, pos, node_size=20, edgelist=el,
-                node_color='r', edge_color='pink')
+        nx.draw(self._d, pos, node_size=8, #edgelist=el,
+                node_color='orange', edge_color='pink')
 
     def __c(self, f):   # return geometric center for a bounded face
         if float('inf') in f:
-            return (0, 0)
+            return (2, 2)
         return (sum(self.vertices[i][0] for i in f) / 3,
                 sum(self.vertices[i][1] for i in f) / 3)
 
-    def draw_minimum_spaning_tree(self):
+    def draw_minimum_spanning_tree(self):
         nx.draw(self._bfs, self.vertices, node_size=20, edge_color='#8888ff')
         # pos = {f: self.__c(f) for f in self._d}
         # nx.draw(self._dt, pos, node_size=20, edge_color='#8888ff')
 
     def __dist(self, u, v):
         p, q = self.vertices[u], self.vertices[v]
-        return sqrt((p[0]-q[0])**2 + (p[1]-q[1])**2)
+#        return sqrt((p[0]-q[0])**2 + (p[1]-q[1])**2)
+        return ((p[0]-q[0])**2 + (p[1]-q[1])**2)**0.5
 
     def draw_cycle_separator(self):
         n = len(self._cs)
@@ -167,7 +169,8 @@ class dt:
         return self._cs
 
 
-def gen(n=300, s=6):
+#def gen(n=300, s=6):
+def gen(n=300, s=None):
     seed(s)
     return {'vertices': [(random(), random()) for i in range(n)]}
 
@@ -178,9 +181,9 @@ if __name__ == '__main__':
 
     t.draw_planar_graph()
 #    t.draw_dual()
-#    t.draw_minimum_spaning_tree()
+#    t.draw_minimum_spanning_tree()
     t.draw_cycle_separator()
 
     plt.gca().set_aspect('equal')
-    plt.savefig('cycle_separator_01.png', bbox_inches='tight')
+#    plt.savefig('cycle_separator_01.png', bbox_inches='tight')
     plt.show()
