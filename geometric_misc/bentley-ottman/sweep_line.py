@@ -35,7 +35,8 @@ class sweep_line:
         i = self.__pos(p)
         return self.ilist[i-1], self.ilist[i]
 
-    def __pos(self, (x, y)):
+    def __pos(self, coord):
+        x, y = coord
         left, right, pos = 0, len(self.ilist) - 1, 0
         while left < right:
             pos = (left + right) // 2

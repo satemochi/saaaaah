@@ -7,7 +7,7 @@ from sweep_line import sweep_line
 
 class line_intersections:
     """
-    Bentley-Ottman algorithm
+    Bentley-Ottmann algorithm
     """
     sentinels = [float('-inf'), float('inf')]
 
@@ -48,8 +48,10 @@ class line_intersections:
         b, a = self.sl.neighbors(p)
         return self.__test_intersect(b, a)
 
-    def swap_event(self, p, (i, j)):
-        bp, ap = self.sl.swap(p, i, j)
+#    def swap_event(self, p, (i, j)):
+    def swap_event(self, p, i):
+#        bp, ap = self.sl.swap(p, i, j)
+        bp, ap = self.sl.swap(p, *i)
         if bp is not None:
             bc, ac = self.__test_intersect(*bp), self.__test_intersect(*ap)
             if bc:

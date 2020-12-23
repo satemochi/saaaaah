@@ -6,7 +6,7 @@ from line_intersections import line_intersections
 def gen(n, seed=None):
     random.seed(seed)
     return [((random.random(), random.random()),
-             (random.random(), random.random())) for i in xrange(n)]
+             (random.random(), random.random())) for i in range(n)]
 
 
 def plot_segs(segs):
