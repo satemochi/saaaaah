@@ -1,4 +1,3 @@
-from collections import defaultdict, ChainMap
 from functools import reduce
 from heapq import heappop, heappush
 from itertools import combinations
@@ -9,8 +8,7 @@ import networkx as nx
 
 
 def gen(n, k):
-    """
-    Generate a random k-regular / k-uniform / n-vertex hypergraph
+    """ Generate a random k-regular / k-uniform / n-vertex hypergraph
 
     Parageters
     ----------
@@ -19,10 +17,10 @@ def gen(n, k):
 
     Returns
     -------
-        dict: set of hyper-edges (from vertex to list)
+        dict: set of hyper-edges (as map from an edge to incident vertices)
     """
     hyper_edges = __gale_shapley(n, k)
-    while hyper_edges is None or not __test(hyper_edges):
+    while hyper_edges is None or __test_multiedge_violation(hyper_edges):
         hyper_edges = __gale_shapley(n, k)
     return hyper_edges
 
@@ -30,15 +28,14 @@ def gen(n, k):
 def __gale_shapley(n, k):
     vp = {i: iter(range(n, 2*n)) for i in range(n)}
     ep = {n+i: sample(range(n), n) for i in range(n)}
-    stack = reduce(add, [[x]*k for x in vp])
-    m = defaultdict(list)
+    stack, m = reduce(add, [[x]*k for x in vp]), {}
     while stack:
         try:
             e = next(vp[(v := stack.pop())])
         except(StopIteration):
             return
         if e not in m:
-            m[e].append((-ep[e][v], v))
+            m[e] = [(-ep[e][v], v)]
         else:
             heappush(m[e], (-ep[e][v], v))
             if len(m[e]) > k:
@@ -47,8 +44,8 @@ def __gale_shapley(n, k):
     return {e: [v for _, v in m[e]] for e in m}
 
 
-def __test(edges):
-    return all(set(x) != set(y) for x, y in combinations(edges.values(), 2))
+def __test_multiedge_violation(edges):
+    return any(set(x) == set(y) for x, y in combinations(edges.values(), 2))
 
 
 def draw(edict):
