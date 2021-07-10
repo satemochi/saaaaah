@@ -1,20 +1,10 @@
-from random import seed
-from matplotlib import pyplot as plt
 import networkx as nx
-
-
-def bipartite_regular_graph(g):
-    assert(nx.is_regular(g))
-    d = nx.DiGraph(nx.eulerian_circuit(g))
-    return nx.Graph([(u, g.order()+v) for u, v in d.edges])
 
 
 def perfect_matching_iter(g):
     assert(nx.is_bipartite(g) and nx.is_regular(g))
-    from pprint import pprint
-
     a, _ = nx.bipartite.sets(g)
-    m = [(v, (mm := nx.bipartite.hopcroft_karp_matching(g))[v]) for v in a]
+    m = [(v, (_ := nx.bipartite.hopcroft_karp_matching(g))[v]) for v in a]
     yield m
     stack = [(g, m, ())]
     while stack:
@@ -42,14 +32,22 @@ def gen(n, d):
     return nx.random_regular_graph(d, n)
 
 
+def bipartite_regular_graph(g):
+    assert(nx.is_regular(g))
+    d = nx.DiGraph(nx.eulerian_circuit(g))
+    return nx.Graph([(u, g.order()+v) for u, v in d.edges])
+
+
 if __name__ == '__main__':
+    from random import seed
+    from matplotlib import pyplot as plt
     seed(0)
     g = gen(n := 10, d := 6)
     b = bipartite_regular_graph(g)
 
     pos = nx.spring_layout(b)
     for i, pm in enumerate(perfect_matching_iter(b)):
-        print(i,)
+        print(i, end=' ', flush=True)
         plt.gca().cla()
         nx.draw_networkx_edges(g, pos, alpha=0.1)
         nx.draw_networkx_edges(b, pos)
