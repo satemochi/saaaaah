@@ -1,13 +1,10 @@
-class farthest_in_future:
+class furthest_in_future:
     def __init__(self, cache_size=3, access_sequence=None):
         if access_sequence:
-            if len(access_sequence) < cache_size:
-                print('no cache miss')
-            else:
-                self.sched(cache_size, access_sequence)
+            if cache_size < len(access_sequence):
+                self.__sched(cache_size, access_sequence)
 
-    def sched(self, cache_size, access_sequence):
-        assert(cache_size < len(access_sequence))
+    def __sched(self, cache_size, access_sequence):
         self._evicted_elements = {}
         cache = {access_sequence[i] for i in range(cache_size)}
         for i in range(cache_size, len(access_sequence)):
@@ -32,6 +29,6 @@ class farthest_in_future:
 if __name__ == '__main__':
     ac = [1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 5, 4, 1, 2, 2, 1, 3, 4, 5, 1, 6, 1, 4]
     print(ac)
-    fif = farthest_in_future(cache_size=6, access_sequence=ac)
+    fif = furthest_in_future(cache_size=6, access_sequence=ac)
     print(fif.schedule)
     print('cache miss count:', len(fif.schedule))
