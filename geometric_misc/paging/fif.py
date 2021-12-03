@@ -15,11 +15,9 @@ class furthest_in_future:
             self._evicted_elements[i] = e
 
     @staticmethod
-    def _to_be_evicted(i, cache, access_sequence):
-        for c in cache:
-            if c not in access_sequence[i+1:]:
-                return c
-        return max((access_sequence.index(c, i), c) for c in cache)[1]
+    def _to_be_evicted(i, cache, sequence):
+        a = {c: -t for t, c in enumerate(reversed(sequence[i+1:]+list(cache)))}
+        return max((a[c], c) for c in cache)[1]
 
     @property
     def schedule(self):
@@ -27,8 +25,9 @@ class furthest_in_future:
 
 
 if __name__ == '__main__':
+    print(f'cache size: {(cache_size := 6)}')
     ac = [1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 5, 4, 1, 2, 2, 1, 3, 4, 5, 1, 6, 1, 4]
-    print(ac)
-    fif = furthest_in_future(cache_size=6, access_sequence=ac)
+    print(f'requests: {ac}')
+    fif = furthest_in_future(cache_size=cache_size, access_sequence=ac)
     print(fif.schedule)
     print('cache miss count:', len(fif.schedule))
