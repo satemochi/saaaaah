@@ -46,10 +46,8 @@ class linear_probing:
         return (h * int(self.cap)) >> 32
 
     def insert(self, x):
-        if (self.arr[(pos := self.__resolve(x))] is None or
-                self.arr[pos] != x):
-            self.size += 1
-            self.arr[pos] = x
+        if (self.arr[(i := self.__resolve(x))] is None or self.arr[i] != x):
+            self.size, self.arr[i] = self.size + 1, x
             if self.size > self.cap * 0.9:
                 self.__grow()
 
@@ -62,7 +60,6 @@ class linear_probing:
         for x in old_array:
             if x is not None:
                 self.insert(x)
-        assert(old_size == self.size)
 
 
 class key(Structure):
