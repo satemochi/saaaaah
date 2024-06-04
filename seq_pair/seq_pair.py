@@ -129,6 +129,7 @@ class sequence_pair():
 
     def get_neighbor(self):
         mode = np.random.randint(6)
+#        mode = np.random.randint(7)
         if mode == 0:
             return self.__xswap()
         elif mode == 1:
@@ -188,7 +189,7 @@ class simulated_annealing():
                 self.__best = copy.deepcopy(self.__csp)
             self.__T *= 0.999
             self.__k += 1
-        print self.__k, self.__best.area()
+        print(self.__k, self.__best.area())
 
     def draw(self):
         self.__best.draw()
@@ -217,4 +218,4 @@ if __name__ == '__main__':
     sa.draw()
     sa.draw_log()
     plt.show()
-    print sa
+    print(sa)

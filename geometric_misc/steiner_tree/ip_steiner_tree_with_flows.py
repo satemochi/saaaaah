@@ -1,11 +1,10 @@
-from random import sample, seed
 from pulp import LpProblem, lpSum, LpVariable, PULP_CBC_CMD
 import networkx as nx
 
 
 def steiner_tree(g, term):
     lp, x = __get_formulae(g, term)
-    lp.writeLP('steiner_tree.lp')
+    # lp.writeLP('steiner_tree.lp')
     PULP_CBC_CMD(msg=0).solve(lp)
     return nx.Graph((e for e in x if x[e].varValue > 0))
 
@@ -20,7 +19,6 @@ def __get_formulae(g, term):
                 for u, v in g.edges}
         f[t].update({(v, u): LpVariable(f'f^{t}_{v},{u}', cat='Binary')
                      for u, v in g.edges})
-    for t in term[1:]:
         for u in g:
             if u == term[0]:    # term[0] is as a root of steiner arborescence
                 lp += lpSum(f[t][(u, v)] - f[t][(v, u)] for v in g[u]) == 1
@@ -28,18 +26,18 @@ def __get_formulae(g, term):
                 lp += lpSum(f[t][(u, v)] - f[t][(v, u)] for v in g[u]) == -1
             else:
                 lp += lpSum(f[t][(u, v)] - f[t][(v, u)] for v in g[u]) == 0
-    for e in g.edges:
-        for t in term[1:]:
+        for e in g.edges:
             lp += x[e] >= f[t][e] + f[t][e[::-1]]
     return lp, x
 
 
 def gen(n):
-    from random import sample, seed
+    from random import sample
     return (g := nx.frucht_graph()), sample(g.nodes, n)
 
 
 if __name__ == '__main__':
+    from random import seed
     seed(9)
     g, t = gen(3)
     st = steiner_tree(g, t)

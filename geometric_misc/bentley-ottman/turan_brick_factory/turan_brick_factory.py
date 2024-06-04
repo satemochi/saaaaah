@@ -44,20 +44,21 @@ if __name__ == '__main__':
     g = nx.complete_bipartite_graph(m, n)
     pos = get_pos(g)
 
-    a, b = nx.bipartite.sets(g)
     # nx.draw_networkx_labels(g, pos, font_size=9)
     # nodes = nx.draw_networkx_nodes(g, pos, node_size=160, nodelist=a,
-    nodes = nx.draw_networkx_nodes(g, pos, node_size=60, nodelist=a,
+
+    ns = 60
+    a, b = nx.bipartite.sets(g)
+    nodes = nx.draw_networkx_nodes(g, pos, node_size=ns, nodelist=a,
                                    node_color='#0087ff')
     nodes.set_edgecolor('k')
-    # nodes = nx.draw_networkx_nodes(g, pos, node_size=160, nodelist=b,
-    nodes = nx.draw_networkx_nodes(g, pos, node_size=60, nodelist=b,
+    nodes = nx.draw_networkx_nodes(g, pos, node_size=ns, nodelist=b,
                                    node_color='#ffdf00')
     nodes.set_edgecolor('k')
     nx.draw_networkx_edges(g, pos, alpha=0.25)
 
     for x, y in line_intersections(get_segs(g, pos)).search():
-        plt.scatter([x], [y], c='#cc3333', s=4)
+        plt.scatter([x], [y], c='#cc3333', s=5)
 
     e = 0.1
     plt.gca().set_xlim(-2-e, 2+e)
@@ -65,5 +66,5 @@ if __name__ == '__main__':
     plt.axis('off')
     plt.gca().set_aspect('equal')
     plt.tight_layout()
-    plt.savefig('turan_brick_factory_01.png', bbox_inches='tight', dpi=200)
+    #plt.savefig('turan_brick_factory_01.png', bbox_inches='tight', dpi=200)
     plt.show()

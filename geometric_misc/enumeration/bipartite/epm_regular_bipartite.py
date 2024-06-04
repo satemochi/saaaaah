@@ -2,7 +2,7 @@ import networkx as nx
 
 
 def perfect_matching_iter(g):
-    assert(nx.is_bipartite(g) and nx.is_regular(g))
+    assert(nx.is_bipartite(g))
     a, _ = nx.bipartite.sets(g)
     m = [(v, (_ := nx.bipartite.hopcroft_karp_matching(g))[v]) for v in a]
     yield m
@@ -38,16 +38,21 @@ def bipartite_regular_graph(g):
     return nx.Graph([(u, g.order()+v) for u, v in d.edges])
 
 
+def _is_perfect_match(g, m):
+    sg = nx.Graph(m)
+    return all(d == 1 for _, d in sg.degree)
+
+
 if __name__ == '__main__':
     from random import seed
     from matplotlib import pyplot as plt
-    seed(0)
+    seed(1)
     g = gen(n := 10, d := 6)
     b = bipartite_regular_graph(g)
 
     pos = nx.spring_layout(b)
     for i, pm in enumerate(perfect_matching_iter(b)):
-        print(i, end=' ', flush=True)
+        print(i if _is_perfect_match(b, pm) else 'error', end=' ', flush=True)
         plt.gca().cla()
         nx.draw_networkx_edges(g, pos, alpha=0.1)
         nx.draw_networkx_edges(b, pos)

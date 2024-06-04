@@ -15,9 +15,11 @@ class fgg():
         return self._polygon_vertex_count
 
     def get_init_dss(self):
-        dss = unichr(0)
+#        dss = unichr(0)
+        dss = chr(0)
         for i in range(1, self._polygon_vertex_count - 1):
-            dss += unichr(i) + unichr(0)
+#            dss += unichr(i) + unichr(0)
+            dss += chr(i) + chr(0)
         return dss
 
     def print_dss(self, dss):
@@ -28,7 +30,8 @@ class fgg():
         head = 0
         for i in range(1, self._polygon_vertex_count - 1):
             tail = head
-            while dss[tail] != unichr(i):
+#            while dss[tail] != unichr(i):
+            while dss[tail] != chr(i):
                 tail += 1
             split_strings.append(dss[head: tail])
             head = tail

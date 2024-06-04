@@ -16,7 +16,7 @@ def gomory_hu_tree(g, cap='capacity', flow_func=edmonds_karp):
             if v not in (s, root) and tree[v] == t:
                 tree[v], w[v, s] = s, w.get((v, t), w[s, t])
     T = nx.Graph()
-    T.add_weighted_edges_from(((u, v, w[(u, v)]) for u, v in tree.items()))
+    T.add_weighted_edges_from(((u, v, w[u, v]) for u, v in tree.items()))
     return T
 
 
@@ -45,7 +45,7 @@ if __name__ == '__main__':
     nx.draw_networkx_nodes(g, pos, node_color='#ffcccc')
     nx.draw_networkx_edges(g, pos, alpha=0.25)
     nx.draw_networkx_labels(g, pos)
-    
+
     nx.draw_networkx_edges(tree, pos, edge_color='r')
 
     plt.gca().set_aspect('equal')

@@ -7,21 +7,21 @@ from matplotlib import pyplot as plt
 import networkx as nx
 
 
-def gen(n, k):
+def random_k_regular_hyper_graph(n, k):
     """ Generate a random k-regular / k-uniform / n-vertex hypergraph
 
-    Parageters
+    Parameters
     ----------
         n: number of vertices
         k: uniformity and regularity
 
     Returns
     -------
-        dict: set of hyper-edges (as map from an edge to incident vertices)
+        dict: from a hyper-edge to incident vertices
     """
-    hyper_edges = __gale_shapley(n, k)
-    while hyper_edges is None or __test_multiedge_violation(hyper_edges):
-        hyper_edges = __gale_shapley(n, k)
+    while ((hyper_edges := __gale_shapley(n, k)) is None
+            or __test_multiedge_violation(hyper_edges)):
+        pass
     return hyper_edges
 
 
@@ -56,8 +56,9 @@ def draw(edict):
     for e in edict:
         g.add_edges_from([(e, v) for v in edict[e]])
     for v, c in zip([range(n), range(n, 2*n)], ['#ffcccc', '#ccccff']):
-        nx.draw_networkx_nodes(g, pos, nodelist=v, node_color=c)
-    nx.draw_networkx_edges(g, pos, alpha=0.25)
+        nodes = nx.draw_networkx_nodes(g, pos, nodelist=v, node_color=c)
+        nodes.set_edgecolor('black')
+    nx.draw_networkx_edges(g, pos, edge_color='g', alpha=0.35)
     nx.draw_networkx_labels(g, pos)
     plt.gca().axis('off')
     plt.gca().set_aspect('equal')
@@ -75,4 +76,4 @@ def get_pos(n):
 
 if __name__ == '__main__':
     seed(4)
-    draw(gen(7, 3))
+    draw(random_k_regular_hyper_graph(7, 3))
