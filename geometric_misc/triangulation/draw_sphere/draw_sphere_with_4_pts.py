@@ -7,7 +7,7 @@ import sympy as sp
 def get_center_radius(pts):
     x, y, z = sp.symbols('x, y, z')
     entry = [[x**2 + y**2 + z**2, x, y, z, 1]]
-    for i, (xi, yi, zi) in enumerate(pts):
+    for xi, yi, zi in pts:
         entry += [[xi**2 + yi**2 + zi**2, xi, yi, zi, 1]]
     A = sp.Matrix(entry)
     B = sp.Matrix(5, 5, sp.symbols('B:5:5'))
@@ -52,6 +52,6 @@ if __name__ == '__main__':
 
     draw(pts, ax)
     draw_sphere(c, r, ax)
-    plt.savefig('draw_sphere_with_4_pts.png', bbox_inches='tight', dpi=300)
+    # plt.savefig('draw_sphere_with_4_pts.png', bbox_inches='tight', dpi=300)
     plt.tight_layout()
     plt.show()

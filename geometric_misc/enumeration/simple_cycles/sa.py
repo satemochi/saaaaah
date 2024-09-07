@@ -8,17 +8,15 @@ class fc:
         self.__g, self.__ei = g, {}
         for i, (u, v) in enumerate(g.edges):
             self.__ei[u, v], self.__ei[v, u] = i, i
-        self.__c = [nx.cycle_graph(i) for i in range(3, g.order()+1)]
 
     def iter_cycles(self):
-        for ci in self.__c:
+        for ci in iter(nx.cycle_graph(i) for i in range(3, g.order()+1)):
             cl, m = set(), GraphMatcher(self.__g, ci)
             for f in m.subgraph_monomorphisms_iter():
                 i = {v: k for k, v in f.items()}
-                if (cc := self.__ec((cv := [i[v] for v in ci]))) in cl:
-                    continue
-                yield cv
-                cl.add(cc)
+                if (cc := self.__ec((cv := [i[v] for v in ci]))) not in cl:
+                    yield cv
+                    cl.add(cc)
 
     def __ec(self, c):
         return reduce(lambda x, i: x + (1 << self.__ei[i]), zip(c, c[1:]),
