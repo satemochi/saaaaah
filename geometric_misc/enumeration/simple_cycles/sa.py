@@ -3,45 +3,45 @@ import networkx as nx
 from networkx.algorithms.isomorphism import GraphMatcher
 
 
-class fc:
-    def __init__(self, g):
-        self.__g, self.__ei = g, {}
-        for i, (u, v) in enumerate(g.edges):
-            self.__ei[u, v], self.__ei[v, u] = i, i
+def sc_iter(g):
+    ei = {}
+    for i, (u, v) in enumerate(g.edges):
+        ei[u, v], ei[v, u] = i, i
 
-    def iter_cycles(self):
-        for ci in iter(nx.cycle_graph(i) for i in range(3, g.order()+1)):
-            cl, m = set(), GraphMatcher(self.__g, ci)
-            for f in m.subgraph_monomorphisms_iter():
-                i = {v: k for k, v in f.items()}
-                if (cc := self.__ec((cv := [i[v] for v in ci]))) not in cl:
-                    yield cv
-                    cl.add(cc)
-
-    def __ec(self, c):
-        return reduce(lambda x, i: x + (1 << self.__ei[i]), zip(c, c[1:]),
-                      1 << self.__ei[c[-1], c[0]])
+    for ci in iter(nx.cycle_graph(i) for i in range(3, g.order()+1)):
+        cl, m = set(), GraphMatcher(g, ci)
+        for f in m.subgraph_monomorphisms_iter():
+            i = {v: k for k, v in f.items()}
+            cv = [i[v] for v in ci]
+            cc = reduce(lambda x, e: x + (1 << ei[e]), zip(cv, cv[1:]),
+                        1 << ei[cv[-1], cv[0]])
+            if cc not in cl:
+                yield cv
+                cl.add(cc)
 
 
 def gen():
-    return nx.frucht_graph()
-    return nx.house_x_graph()
+    return nx.frucht_graph()                    # 83
+    return nx.house_x_graph()                   # 12
+    return nx.tetrahedral_graph()               # 7
+    return nx.truncated_tetrahedron_graph()     # 84
+    return nx.chvatal_graph()                   # 1755
 
 
 if __name__ == '__main__':
     g = gen()
-    print(len(list(fc(g).iter_cycles())), len(list(nx.simple_cycles(g))))
+    print(len(list(sc_iter(g))), len(list(nx.simple_cycles(g))))
 
     from matplotlib import pyplot as plt
     pos = nx.spring_layout(g, seed=1)
-    for c in fc(g).iter_cycles():
+    for c in sc_iter(g):
         nx.draw_networkx_nodes(g, pos, node_color='#ffcccc').set_edgecolor('k')
         nx.draw_networkx_edges(g, pos, alpha=0.3)
         nx.draw_networkx_labels(g, pos)
 
         plt.gca().set_aspect('equal')
         plt.gca().axis('off')
-        el = [(u, v) for u, v in zip(c, c[1:])] + [(c[-1], c[0])]
+        el = tuple(zip(c, c[1:])) + ((c[-1], c[0]),)
         nx.draw_networkx_edges(g, pos, edgelist=el, edge_color='g', width=2)
         plt.tight_layout()
         plt.draw()
