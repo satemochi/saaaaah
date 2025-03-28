@@ -1,3 +1,4 @@
+from collections import defaultdict
 from itertools import chain, combinations
 from freetype import Face
 from matplotlib import pyplot as plt
@@ -146,11 +147,13 @@ if __name__ == '__main__':
     nx.draw_networkx_edges(g, pos, alpha=0.2)
     print(f'Triangulation is done: {g.order()} vertices')
 
-    dual = nx.Graph()
     triangles = t['triangles']
-    for i, j in combinations(range(len(triangles)), 2):
-        if len(set(triangles[i]) & set(triangles[j])) == 2:
-            dual.add_edge(i, j)
+    edges = defaultdict(list)
+    for i in range(len(triangles)):
+        for u, v in combinations(triangles[i], 2):
+            e = (u, v) if u < v else (v, u)
+            edges[e].append(i)
+    dual = nx.Graph((e for e in edges.values() if len(e) == 2))
     print(f'Dual network is done: {dual.order()} faces')
     # d_pos = {v: (sum(x for x, _ in t['vertices'][triangles[v]])/3,
     #              sum(y for _, y in t['vertices'][triangles[v]])/3)
