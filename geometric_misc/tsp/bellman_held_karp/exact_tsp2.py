@@ -15,16 +15,16 @@ def gen(n=16):
 
 
 def bellman_held_karp_1962(g):
-    L, s = {}, (n := g.order()) - 1
-    for i in range(1, 1 << s):
+    L = {}
+    for i in range(1, 1 << (s := g.order() - 1)):
         for v in xmpz(i).iter_set():
             if (a := (i ^ (1 << v))) == 0:
                 L[i, v] = (g[s][v]['w'], (s,))
             else:
                 L[i, v] = min((L[a, u][0] + g[u][v]['w'], L[a, u][1] + (u,))
                               for u in xmpz(a).iter_set())
-    x, c = (1 << s) - 1, range(s)
-    return min((L[x, v][0] + g[s][v]['w'], L[x, v][1] + (v,)) for v in c)
+    return min((L[(x := (1 << s) - 1), v][0] + g[s][v]['w'], L[x, v][1] + (v,))
+                for v in range(s))
 
 
 if __name__ == '__main__':
@@ -43,5 +43,4 @@ if __name__ == '__main__':
     plt.gca().set_aspect('equal')
     plt.gca().axis('off')
     plt.tight_layout()
-    # plt.savefig('bellman_held_karp_1962.png', bbox_inches='tight')
     plt.show()
