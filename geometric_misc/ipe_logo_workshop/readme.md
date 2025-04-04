@@ -1,14 +1,15 @@
 # Ipe logo workshop
 
 <img src="https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/point_location_with_shape_of_Ipe.png" width=25%><img src="https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/constrained_triangulations_with_shape_of_Ipe.png" width=25%><img src="https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/visibility_graph_with_shape_of_Ipe.png" width=25%><img src="https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/approximated_geodesic_voronoi_in_Ipe.png" width=25%>
-<img src="https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/tsp_art_with_polygonalization_in_ipe.png" width=25%><img src="https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/quadtree_for_shape_of_Ipe.png" width=25%></div>
+<img src="https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/tsp_art_with_polygonalization_in_ipe.png" width=25%><img src="https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/quadtree_for_shape_of_Ipe.png" width=25%></div><img src="https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/circle_packing_with_descartes_theorem_in_Ipe.png" width=25%></div>
 
 
 
 ## Description
 
-今回は python + matplotlib + `backend_ipe.py`　で `.ipe` ファイルを生成してみました。
-文字列 Ipe のグリフを入力多角形として
+ここは Ipe のロコを制作している工房です。
+python + matplotlib + `backend_ipe.py`　で `.ipe` ファイルを制作しています。
+基本的に、文字列 Ipe のグリフを入力多角形として
 計算幾何学で代表的なトピックでいろいろと図形を描画しています。
 Ipe をモチーフにしているのは日頃の感謝の表明です。
 計算幾何学のトピックから選んで作成している理由は Ipe の作者であるオットフリードさんへのオマージュです。
@@ -107,6 +108,20 @@ Ipe 多角形の頂点を入力として四分木を適用してみました。�
 
 <div align="center">
 <img src="https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/quadtree_for_shape_of_Ipe.png" width=75%></div>
+
+
+
+### Circle packing with Descartes Theorem
+Ipe 多角形内部に異なる半径の円を充填してみました。
+このコードは aarizat さんの [circpacker: Circle Packer](https://github.com/aarizat/circpacker/tree/master) を利用しています。
+下記の python コードに必要箇所を埋め込んでいますが、普通に使うなら pip でインストールするとよいかと思います。
+BSD ライセンスです。
+- python: [circle_packing_with_descartes_theorem_in_Ipe.py](https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/circle_packing_with_descartes_theorem_in_Ipe.py)
+- ipe: [circle_packing_with_descartes_theorem_in_Ipe.ipe](https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/circle_packing_with_descartes_theorem_in_Ipe.ipe)
+
+
+<div align="center">
+<img src="https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/circle_packing_with_descartes_theorem_in_Ipe.png" width=75%></div>
 
 
 
