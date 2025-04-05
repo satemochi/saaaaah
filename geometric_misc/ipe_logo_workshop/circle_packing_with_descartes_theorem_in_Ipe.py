@@ -242,14 +242,13 @@ if __name__ == '__main__':
     assert Ipe.is_valid
 
 #    import matplotlib
-    #matplotlib.use('module://backend_ipe')
+#    matplotlib.use('module://backend_ipe')
 
     t = triangulate(get_poly_dict(Ipe), 'pq30')
-#    t = triangulate(get_poly_dict(Ipe), 'pD')
     for ti in t['triangles']:
         for c in Triangle(t['vertices'][ti]).circInTriangle(lenght=7):
             plt.gca().add_patch(plt.Circle(c.center, c.radius,
-                                           fill=False, lw=1, ec='k'))
+                                           fill=False, lw=0.2, ec='k'))
 #    g = nx.Graph(chain(*(combinations(ti, 2) for ti in t['triangles'])))
 #    pos = {v: t['vertices'][v] for v in g}
 #    nx.draw_networkx_edges(g, pos, alpha=0.5)
