@@ -136,5 +136,6 @@ if __name__ == '__main__':
     plt.autoscale()
     plt.tight_layout()
 #    plt.savefig('visibility_graph_with_shape_of_Ipe.ipe', format='ipe')
-    plt.savefig('visibility_graph_with_shape_of_Ipe.png', bbox_inches='tight')
+    plt.savefig('visibility_graph_with_shape_of_Ipe.png', bbox_inches='tight',
+                dpi=900)
     plt.show()

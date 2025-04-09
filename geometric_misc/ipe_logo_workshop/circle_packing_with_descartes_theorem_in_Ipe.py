@@ -247,8 +247,8 @@ if __name__ == '__main__':
     t = triangulate(get_poly_dict(Ipe), 'pq30')
     for ti in t['triangles']:
         for c in Triangle(t['vertices'][ti]).circInTriangle(lenght=7):
-            plt.gca().add_patch(plt.Circle(c.center, c.radius,
-                                           fill=False, lw=0.2, ec='k'))
+            cp = plt.Circle(c.center, c.radius, zorder=10,                                                  facecolor='mistyrose', lw=0.2, ec='k')
+            plt.gca().add_patch(cp)
 #    g = nx.Graph(chain(*(combinations(ti, 2) for ti in t['triangles'])))
 #    pos = {v: t['vertices'][v] for v in g}
 #    nx.draw_networkx_edges(g, pos, alpha=0.5)
