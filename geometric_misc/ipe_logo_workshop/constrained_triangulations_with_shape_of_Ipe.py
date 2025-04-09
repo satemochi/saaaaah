@@ -135,5 +135,5 @@ if __name__ == '__main__':
 #    plt.savefig('constrained_triangulations_with_shape_of_Ipe.ipe',
 #                format='ipe')
 #    plt.savefig('constrained_triangulations_with_shape_of_Ipe.png',
-#                bbox_inches='tight')
+#                bbox_inches='tight', dpi=900)
     plt.show()

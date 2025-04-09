@@ -4,9 +4,9 @@ from freetype import Face
 from matplotlib import pyplot as plt
 from matplotlib.path import Path
 from matplotlib.patches import PathPatch
-from matplotlib.collections import PatchCollection, LineCollection
+from matplotlib.collections import PatchCollection
 import numpy as np
-from scipy.spatial import Voronoi, voronoi_plot_2d
+from scipy.spatial import Voronoi
 from shapely.geometry import Polygon, LineString
 from shapely import union_all
 from shapely.affinity import scale, translate
@@ -96,7 +96,7 @@ class line_voro:
     @staticmethod
     def __split(s):
         (x0, y0), (x1, y1) = s
-        if (n := sqrt((x0 - x1) * (x0 - x1) + (y0 - y1) * (y0 - y1))) < 5:
+        if (n := np.sqrt((x0 - x1) * (x0 - x1) + (y0 - y1) * (y0 - y1))) < 5:
             return s
         dx, dy = (x1 - x0) / n, (y1 - y0) / n
         return [(x0 + dx*i, y0 + dy*i) for i in range(int(n))]
@@ -111,8 +111,8 @@ if __name__ == '__main__':
     _e = translate(scale(get_polygon('e'), 0.7, 0.7), xoff=800, yoff=-130)
     assert _e.is_valid
 
-    import matplotlib
-    matplotlib.use('module://backend_ipe')
+#    import matplotlib
+#    matplotlib.use('module://backend_ipe')
 
     Ipe = union_all([_I, _p, _e])
     assert Ipe.is_valid
@@ -133,7 +133,7 @@ if __name__ == '__main__':
     plt.gca().set_aspect('equal')
     plt.autoscale()
     plt.tight_layout()
-    plt.savefig('medial_axis_with_segment_voronoi.ipe', format='ipe')
-    plt.savefig('medial_axis_with_segment_voronoi.png', bbox_inches='tight',
-                dpi=900)
-#    plt.show()
+#    plt.savefig('medial_axis_with_segment_voronoi.ipe', format='ipe')
+#    plt.savefig('medial_axis_with_segment_voronoi.png', bbox_inches='tight',
+#                dpi=900)
+    plt.show()
