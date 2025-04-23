@@ -2,7 +2,8 @@
 
 <img src="https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/point_location_with_shape_of_Ipe.png" width=25%><img src="https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/constrained_triangulations_with_shape_of_Ipe.png" width=25%><img src="https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/visibility_graph_with_shape_of_Ipe.png" width=25%><img src="https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/approximated_geodesic_voronoi_in_Ipe.png" width=25%>
 <img src="https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/tsp_art_with_polygonalization_in_ipe.png" width=25%><img src="https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/quadtree_for_shape_of_Ipe.png" width=25%><img src="https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/circle_packing_with_descartes_theorem_in_Ipe.png" width=25%><img src="https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/contour_polygons_with_shape_of_Ipe.png" width=25%>
-<img src="https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/medial_axis_with_segment_voronoi.png" width=25%></div>
+<img src="https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/medial_axis_with_segment_voronoi.png" width=25%> <img src="https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/art_gallery_problem_in_shape_of_ipe.png" width=25%>
+
 
 
 
@@ -47,6 +48,7 @@ Ipe の作者である
 です。
 - それから英語多角形のブール演算は [shapely](https://github.com/shapely/shapely)
 を利用しています。
+[BSD ライセンス](https://github.com/shapely/shapely/blob/main/LICENSE.txt)です。
 
 
 
@@ -78,7 +80,8 @@ Ipe の作者である
 ### Mesh Generation
 多角形内部を[三角形分割](https://en.wikipedia.org/wiki/Polygon_triangulation)しておくと何かと便利なので[メッシュ生成](https://en.wikipedia.org/wiki/Mesh_generation)モジュール
 [triangle](https://rufat.be/triangle/)
-を利用してやってみました。今回は $30$ 度未満の鋭角三角形を禁止するようなメッシュを生成しています。
+を利用してやってみました。[LGPL-3 ライセンス](https://github.com/drufat/triangle/blob/master/LICENSE)です。
+今回は $30$ 度未満の鋭角三角形を禁止するようなメッシュを生成しています。
 
 - python: [constrained_triangulations_with_shape_of_Ipe.py](https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/constrained_triangulations_with_shape_of_Ipe.py)
 - ipe: [constrained_triangulations_with_shape_of_Ipe.ipe](https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/constrained_triangulations_with_shape_of_Ipe.ipe)
@@ -101,9 +104,11 @@ Ipe の作者である
 可視グラフの生成には
 [Visilibity](https://karlobermeyer.github.io/VisiLibity1/)
 を利用しています。
+[LGPL-3 ライセンス](https://github.com/karlobermeyer/VisiLibity1#license)です。
 英語多角形の曲線部分は頂点が密集しているので
 [RDP アルゴリズム](https://en.wikipedia.org/wiki/Ramer–Douglas–Peucker_algorithm)
 を適用していくつかの頂点を間引いています。
+[MIT ライセンス](https://github.com/fhirschmann/rdp/blob/master/LICENSE.txt)です。
 この際 [rdp パッケージ](https://pypi.org/project/rdp/)を利用しています。
 
 - python: [visibility_graph_with_shape_of_Ipe.py](https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/visibility_graph_with_shape_of_Ipe.py)
@@ -119,7 +124,7 @@ Ipe の作者である
 
 
 ### Geodesic Voronoi Diagram
-Ipe 多角形内で[ボロノイ図](https://en.wikipedia.org/wiki/Voronoi_diagram)が書きたかったのでやってみました。
+Ipe 多角形内で[ボロノイ図](https://en.wikipedia.org/wiki/Voronoi_diagram)が描きたかったのでやってみました。
 [OpenGL](https://ja.wikipedia.org/wiki/OpenGL) や
 [GLFW](https://en.wikipedia.org/wiki/GLFW) を利用して
 ([加法重みの](https://en.wikipedia.org/wiki/Weighted_Voronoi_diagram))
@@ -239,13 +244,34 @@ Ipe 多角形の[中心軸](https://en.wikipedia.org/wiki/Medial_axis)をとり�
 
 
 
+### Art Gallery Problem with vertex-guards 
+
+可視多角形で何かやりたかったので美術館問題の簡単な例をテーマにしてみました。
+可視多角形は可視グラフのときと同様に 
+[Visilibity](https://karlobermeyer.github.io/VisiLibity1/)
+を利用しています。
+[LGPL-3 ライセンス](https://github.com/karlobermeyer/VisiLibity1#license)です。
+最適配置の解決には線形計画ソルバの
+[PuLP + COIN-OR CLP](https://pypi.org/project/PuLP/) を利用しています。
+[MIT ライセンス](https://github.com/coin-or/pulp/blob/master/LICENSE)
+のようです。
+
+
+- python: [art_gallery_problem_in_shape_of_ipe.py](https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/art_gallery_problem_in_shape_of_ipe.py)
+- ipe: [art_gallery_problem_in_shape_of_ipe.ipe](https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/art_gallery_problem_in_shape_of_ipe.ipe)
+
+<div align="center">
+<img src="https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/art_gallery_problem_in_shape_of_ipe.png" width=75%></div>
 
 
 
 
-### おしまい
+
+
+## おしまい
 今回はここまでです。
-気が向いたら計算幾何学のトピックから選んで随時ログ作成していきたいと思います。
+気が向いたら計算幾何学のトピックから選んで随時ロゴ作成していきたいと思います。
+さよーならー。
 
 
 
