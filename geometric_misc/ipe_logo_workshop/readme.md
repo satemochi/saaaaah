@@ -10,33 +10,36 @@
 
 ## Description
 
-This is a workshop that produces (unofficial) logos for the draw tool
+This workshop specializes in creating (unofficial) logos for the drawing tool
 [Ipe](https://ipe.otfried.org).
-We have produced outputs as `.ipe` files with
-python + matplotlib + `backend_ipe.py`.
-The .ipe files published here can be opened and edited by Ipe.
+We generate `.ipe` files
+using a combination of
+Python, Matplotlib, and `backend_ipe.py`.
+These `.ipe` files are full compatible with Ipe
+for further editing.
 
-Each subject uses the glyphs of the string "Ipe" as input polygons, and
+Each subject uses the glyphs of the string "Ipe" as input polygons and
 draws various objects (points, segments, circles, polygons, curves etc.)
 based on typical topics in computational geometry.
-The reason for using Ipe as a motif is a statement of gratitude.
-The reason for choosing a topic in computational geometry as the theme
-is a tribute to the author of Ipe,
-professor [Otfried Cheong](https://otfried.org).
+This approach not only serves as a statement of gratitude for
+the versatile tool Ipe but also pays tribute to its creator,
+Professor [Otfried Cheong](https://otfried.org),
+by exploring the rich field of computational geometry.
 
 
 **Precautions**
-This work is being done by a third party who is not affiliated with
-the original owner.
-You can report [here](https://github.com/satemochi/saaaaah/issues)
-for any questions and requests.
-In addition, if you have found any bugs and errors in our artworks or staff,
+Please note that this work is being conducted by a third party 
+not affiliated with the original owner.
+
+For any questions or requests.
+please report them
+[here](https://github.com/satemochi/saaaaah/issues).
+Additionally, if you discover any bugs or errors in our artworks or staff,
 we would appreciate your report.
 
 
 
 ## Polygon generation for each input
-
 
 We would like to mention fonts and tools we used during
 the input generation phase.
@@ -65,26 +68,35 @@ This is also
 
 
 
-## Gallery and stuff
 
+
+## Gallery and stuff
 
 
 ### Polygonal boolean operations and Inclusion test
 
+We begin with
 [Boolean operations on polygons](https://en.wikipedia.org/wiki/Boolean_operations_on_polygons)
-and [point-in-polygon](https://en.wikipedia.org/wiki/Point_in_polygon#:~:text=In%20computational%20geometry%2C%20the%20point,%2Daided%20design%20(CAD).&text=An%20early%20description%20of%20the,of%20the%20Ray%20Tracing%20News.)
-are our first step.
-This logo is for understanding the basic usage of APIs and data structures.
-So, Ipe is as single polygon with two holes.
-The exterior is a clockwise-ordered point sequence
-(the last point is not the first), and the interiors are counter-clockwise).
+and
+[point-in-polygon](https://en.wikipedia.org/wiki/Point_in_polygon) tests.
+This logo is designed to help understand the basic usage of APIs and
+data structures.
+In this context, Ipe is represented as a single polygon with
+two holes.
+The exterior is defined by a clockwise-ordered point sequence
+(where the last point is not repeat the first),
+and the interiors are defined in a counter-clockwise order.
 
-For resolving point-in-polygon,
-we have used `shapely`-polygon's method
-[contains](https://shapely.readthedocs.io/en/stable/reference/shapely.Polygon.html#shapely.Polygon.contains).
-There are 3,000 points colored according to the inside/outside of Ipe.
-It could plot more points within 10 seconds,
-but file `.ipe` will become too large, so we gave up in an economic sense.
+To resolve the point-in-polygon problem,
+we utilized the 
+[contains](https://shapely.readthedocs.io/en/stable/reference/shapely.Polygon.html#shapely.Polygon.contains)
+method from `shapely`-polygon.
+We have 3,000 points, each colored abased on whether they are
+inside or outside of the Ipe polygon.
+Although it is possible to plot more points within 10 seconds,
+but resulting `.ipe` file would become
+excessively large,
+so we opted not to proceed for economic reasons.
 
 - python: [point_location_with_shape_of_Ipe.py](https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/point_location_with_shape_of_Ipe.py)
 - ipe: [point_location_with_shape_of_Ipe.ipe](https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/point_location_with_shape_of_Ipe.ipe)
@@ -100,19 +112,19 @@ but file `.ipe` will become too large, so we gave up in an economic sense.
 
 ### Mesh Generation
 
-The second step is 
-[mesh generation](https://en.wikipedia.org/wiki/Mesh_generation) /
-(constrained)
+The second step involves 
+[mesh generation](https://en.wikipedia.org/wiki/Mesh_generation) or 
+performing constrained
 [polygon triangulation](https://en.wikipedia.org/wiki/Polygon_triangulation),
-since this (geometric / combinatorial) structure is so useful and fruitful
-for solving other problems.
-We would use the module
-[triangle](https://rufat.be/triangle/)
-for various meshes.
-`triangle` is licensed under
-[LGPL-3](https://github.com/drufat/triangle/blob/master/LICENSE).
-In this artwork,
-we have specified to restrict no triangles with less than 30 degree angle.
+as these (geometric / combinatorial) structures are
+highly beneficial for solving various problems.
+We will use the [triangle](https://rufat.be/triangle/) module,
+which is  licensed under
+[LGPL-3](https://github.com/drufat/triangle/blob/master/LICENSE),
+to create different meshes.
+In this project,
+we have specified that no triangles should have an angle less than 30 degrees.
+
 
 
 - python: [constrained_triangulations_with_shape_of_Ipe.py](https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/constrained_triangulations_with_shape_of_Ipe.py)
@@ -134,19 +146,19 @@ we have specified to restrict no triangles with less than 30 degree angle.
 ### Visibility Graph
 
 We just wanted to see 
-[visibility graphs](https://en.wikipedia.org/wiki/Visibility_graph#:~:text=In%20computational%20geometry%20and%20robot,a%20visible%20connection%20between%20them.), then plot it!
+[visibility graphs](https://en.wikipedia.org/wiki/Visibility_graph#:~:text=In%20computational%20geometry%20and%20robot,a%20visible%20connection%20between%20them.), then plot them!
 For generating visibility graphs,
 we use the module
 [Visilibity](https://karlobermeyer.github.io/VisiLibity1/).
-`visilibity` is
+`Visilibity` is
 [LGPL-3](https://github.com/karlobermeyer/VisiLibity1#license).
-Since English alphabet consist of many curved lines
+Since the English alphabet consists of many curved lines
 and there are a lot of subdivision points on each curve,
-we apply 
+we apply the
 [RDP algorithm](https://en.wikipedia.org/wiki/Ramer–Douglas–Peucker_algorithm)
 in order to decimate points within a tolerance error threshold.
 For this purpose, we use the module [rdp](https://pypi.org/project/rdp/).
-This is
+This is licensed under
 [MIT license](https://github.com/fhirschmann/rdp/blob/master/LICENSE.txt).
 
 - python: [visibility_graph_with_shape_of_Ipe.py](https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/visibility_graph_with_shape_of_Ipe.py)
@@ -163,25 +175,25 @@ This is
 
 ### Geodesic Voronoi Diagram
 
-We wanted to draw the territory under control in a polygon,
-that is (geodesic)
+We wanted to draw the tessellation under proximity in a polygon,
+specifically using geodesic
 [Voronoi diagrams](https://en.wikipedia.org/wiki/Voronoi_diagram).
-All artworks shown so far are for this application!
+All the artworks shown so far are for this application!
 
-We drew approximated version,
-[additively weighted](https://en.wikipedia.org/wiki/Weighted_Voronoi_diagram)
-Voronoi drawing, with 
+We created anapproximated version,
+an [additively weighted](https://en.wikipedia.org/wiki/Weighted_Voronoi_diagram)
+Voronoi drawing, using
 [OpenGL](https://ja.wikipedia.org/wiki/OpenGL) and
 [GLFW](https://en.wikipedia.org/wiki/GLFW).
-Indeed, for extracting polygons (Voronoi region) for each input point,
-we have written a lot of cones into (OpenGL) color buffer, then
+Indeed, to extract polygons (Voronoi cells) for each input point,
+we wrote many cones into the (OpenGL) color buffer, then
 computed (8-neighbor)
 [boundary tracing](https://en.wikipedia.org/wiki/Boundary_tracing)
-on the picture.
+on the image.
 Therefore,
-someone might be angered because of the hard zigzag errors.
-Please try to open it with Ipe and zoom in and out
-to confirm the fatal error.
+some users might be frustrated due to the pronounced zigzag errors.
+Please try opening it with Ipe and zoom in and out
+to confirm the significant error.
 
 
 
@@ -252,7 +264,7 @@ We tried to [pack circles](https://en.wikipedia.org/wiki/Circle_packing)
 with different radii into the Ipe polygon.
 This code has been embedded a part of (modified)
 [circpacker: Circle Packer](https://github.com/aarizat/circpacker/tree/master)
-by Andres Ariza-Triana.
+of Andres Ariza-Triana.
 `circpacker` is BSD license.
 
 
