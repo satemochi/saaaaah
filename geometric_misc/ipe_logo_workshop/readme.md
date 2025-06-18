@@ -22,7 +22,7 @@ Each subject uses the glyphs of the string "Ipe" as input polygons and
 draws various objects (points, segments, circles, polygons, curves etc.)
 based on typical topics in computational geometry.
 This approach not only serves as a statement of gratitude for
-the versatile tool Ipe but also pays tribute to its creator,
+the versatile tool Ipe but also pays tribute to its developer,
 Professor [Otfried Cheong](https://otfried.org),
 by exploring the rich field of computational geometry.
 
@@ -57,13 +57,13 @@ we use [networkx](https://networkx.org).
 [glyph-vector.py](https://github.com/rougier/freetype-py/blob/master/examples/glyph-vector.py) (slightly modified) of
 [freetype-py](https://github.com/rougier/freetype-py).
 This is
-[BSD license](https://github.com/rougier/freetype-py/blob/master/LICENSE.txt).
+[BSD licenses](https://github.com/rougier/freetype-py/blob/master/LICENSE.txt).
 
 - Finally, for Boolean operations on polygons,
 we would use
 [shapely](https://github.com/shapely/shapely).
 This is also
-[BSD license](https://github.com/shapely/shapely/blob/main/LICENSE.txt).
+[BSD licensed](https://github.com/shapely/shapely/blob/main/LICENSE.txt).
 
 
 
@@ -176,7 +176,7 @@ This is licensed under
 ### Geodesic Voronoi Diagram
 
 We wanted to draw the tessellation under proximity in a polygon,
-specifically using geodesic
+specifically known as  geodesic
 [Voronoi diagrams](https://en.wikipedia.org/wiki/Voronoi_diagram).
 All the artworks shown so far are for this application!
 
@@ -351,6 +351,7 @@ One of the optimal configuration of guards can be computed by the modules
 the solver of (mixed) integer linear programming.
 These may be
 [MIT license](https://github.com/coin-or/pulp/blob/master/LICENSE).
+
 Indeed, we have formulated with
 [dominating set problem](https://en.wikipedia.org/wiki/Dominating_set)
 on the visibility graph of the Ipe polygon.
@@ -358,7 +359,7 @@ However, instead of considering the ordinal dominating set,
 we might need to reformulate our approach by adding constraints
 to ensure that the subgraph of the visibility graph,
 induced by points in the set,
-is connected.
+must be connected.
 However, we are still uncertain about this approach.
 
 
