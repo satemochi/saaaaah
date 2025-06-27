@@ -46,7 +46,6 @@ class RendererIpe(RendererBase):
             version="70005xxxxxx",
             creator="Matplotlib")
         self.__style_sheet_setup()
-        self.writer.end()
 
     def __style_sheet_setup(self):
         """ an example on Ipe style sheet (default on Macos) """
@@ -58,6 +57,7 @@ class RendererIpe(RendererBase):
         self.writer.start("ipestyle", name="opacity")
         for i in range(10, 100, 10):
             self.writer.element("opacity", name=f"{i}%", value=f"{i / 100.0}")
+        self.writer.end()
 
     def finalize(self):
         self.writer.close(self._start_id)
@@ -75,7 +75,7 @@ class RendererIpe(RendererBase):
         if rgbFace is not None:     # filling
             r, g, b, opaq = rgbFace
             attrib["fill"] = f"{r} {g} {b}"
-        self.gen_opacity(attrib, opaq)
+        self.__gen_opacity(attrib, opaq)
         self._print_ipe_clip(gc)
         _r, _g, _b, _ = gc.get_rgb()
         self.writer.start(
@@ -145,7 +145,7 @@ class RendererIpe(RendererBase):
             attrib["matrix"] = f"{ca} {sa} -{sa} {ca} {x} {y}"
             x, y = 0, 0
 
-        self.gen_opacity(attrib, gc.get_rgb()[3])
+        self.__gen_opacity(attrib, gc.get_rgb()[3])
         _r, _g, _b, _ = gc.get_rgb()
         self.writer.start(
             "text",
@@ -193,7 +193,7 @@ class RendererIpe(RendererBase):
         return w * (f := (_mpl_pt_to_in := 1/72) * self.dpi), h * f, d * f
 
     @staticmethod
-    def gen_opacity(attrib, opaq):
+    def __gen_opacity(attrib, opaq):
         if opaq < 0.05:
             attrib["opacity"] = "10%"
         elif opaq < 0.95:
@@ -233,10 +233,10 @@ FigureManager = FigureManagerIpe
 def new_figure_manager(num, *args, **kwargs):
     FigureClass = kwargs.pop("FigureClass", Figure)
     thisFig = FigureClass(*args, **kwargs)
-    return new_figure_manager_given_figure(num, thisFig)
+    return _new_figure_manager_given_figure(num, thisFig)
 
 
-def new_figure_manager_given_figure(num, figure):
+def _new_figure_manager_given_figure(num, figure):
     canvas = FigureCanvasIpe(figure)
     manager = FigureManagerIpe(canvas, num)
     return manager

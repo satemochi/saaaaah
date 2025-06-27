@@ -218,7 +218,7 @@ specifically known as  geodesic
 [Voronoi diagrams](https://en.wikipedia.org/wiki/Voronoi_diagram).
 All the artworks shown so far are for this application!
 
-We created anapproximated version,
+We created an approximated version,
 an [additively weighted](https://en.wikipedia.org/wiki/Weighted_Voronoi_diagram)
 Voronoi drawing, using
 [OpenGL](https://ja.wikipedia.org/wiki/OpenGL) and
