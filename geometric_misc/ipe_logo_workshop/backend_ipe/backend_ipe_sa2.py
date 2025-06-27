@@ -3,28 +3,28 @@ from math import cos, radians, sin
 from os.path import exists
 from re import compile
 
+from matplotlib import cbook, rcParams
 from matplotlib.backend_bases import (
     FigureCanvasBase, FigureManagerBase, RendererBase)
 from matplotlib.backends.backend_pgf import LatexManager, _tex_escape
 from matplotlib.backends.backend_svg import XMLWriter
-from matplotlib import cbook
 from matplotlib.figure import Figure
 from matplotlib.path import Path
-from matplotlib import rcParams
-from matplotlib.rcsetup import validate_bool
+from matplotlib.rcsetup import validate_bool, validate_string
 
 
 class XMLWriterIpe(XMLWriter):
     def insertSheet(self, fname):
         self._XMLWriter__flush()
-        with open(fname, "r", encoding='utf-8') as f:
+        with open(fname, "r", encoding="utf-8") as f:
             data = f.read()
             if (i := data.find("<ipestyle")) >= 0:
                 self._XMLWriter__write(data[i:])
 
 
-rcParams.validate["ipe.textsize"] = validate_bool
+rcParams.validate["ipe.preamble"] = validate_string
 rcParams.validate["ipe.stylesheet"] = lambda s: s if s and exists(s) else None
+rcParams.validate["ipe.textsize"] = validate_bool
 _negative_number = compile(r"^\u2212([0-9]+)(\.[0-9]*)?$")
 
 
@@ -45,12 +45,10 @@ class RendererIpe(RendererBase):
             "ipe",
             version="70005xxxxxx",
             creator="Matplotlib")
-        self.__style_sheet_setup()
+        self.__stylesheet()
+        self.__preamble()
 
-    def __style_sheet_setup(self):
-        """ an example on Ipe style sheet (default on Macos) """
-        # _isy = "/Applications/Ipe.app/Contents/Resources/styles/basic.isy"
-        # rcParams["ipe.stylesheet"] = _isy
+    def __stylesheet(self):
         if "ipe.stylesheet" in rcParams:
             if (sheet := rcParams["ipe.stylesheet"]) is not None:
                 self.writer.insertSheet(sheet)
@@ -58,6 +56,12 @@ class RendererIpe(RendererBase):
         for i in range(10, 100, 10):
             self.writer.element("opacity", name=f"{i}%", value=f"{i / 100.0}")
         self.writer.end()
+
+    def __preamble(self):
+        if "ipe.preamble" in rcParams:
+            self.writer.start("preamble")
+            self.writer.data(rcParams["ipe.preamble"])
+            self.writer.end(indent=False)
 
     def finalize(self):
         self.writer.close(self._start_id)
