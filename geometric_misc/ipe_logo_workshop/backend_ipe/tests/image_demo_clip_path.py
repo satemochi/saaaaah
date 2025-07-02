@@ -15,5 +15,5 @@ patch = patches.Circle((260, 200), radius=200, transform=ax.transData)
 im.set_clip_path(patch)
 
 plt.axis('off')
-#plt.show()
+# plt.show()
 plt.savefig('image_demo_clip_path.ipe')

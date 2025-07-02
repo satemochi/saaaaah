@@ -18,5 +18,5 @@ y1 = np.sin(x)
 y2 = np.sin(3 * x)
 plt.fill(x, y1, 'b', x, y2, 'r', alpha=0.3)
 
-#plt.show()
+# plt.show()
 plt.savefig('fill_demo.ipe')

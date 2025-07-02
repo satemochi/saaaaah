@@ -4,10 +4,10 @@ import matplotlib as mpl
 mpl.use('module://backend_ipe_sa2')
 
 
-#mpl.rcParams['ipe.textsize'] = True
+mpl.rcParams['ipe.textsize'] = True
 
 # Make some fake data.
-a = b = np.arange(0,3, .02)
+a = b = np.arange(0, 3, .02)
 c = np.exp(a)
 d = c[::-1]
 

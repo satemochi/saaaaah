@@ -19,7 +19,7 @@ cmaps = [('Sequential',     ['Blues', 'BuGn', 'BuPu',
          ('Miscellaneous',  ['gist_earth', 'terrain', 'ocean', 'gist_stern',
                              'brg', 'CMRmap', 'cubehelix',
                              'gnuplot', 'gnuplot2', 'gist_ncar',
-#                             'nipy_spectral', 'jet', 'rainbow',
+                             # 'nipy_spectral', 'jet', 'rainbow',
                              'jet', 'rainbow',
                              'gist_rainbow', 'hsv', 'flag', 'prism'])]
 
@@ -27,6 +27,7 @@ cmaps = [('Sequential',     ['Blues', 'BuGn', 'BuPu',
 nrows = max(len(cmap_list) for cmap_category, cmap_list in cmaps)
 gradient = np.linspace(0, 1, 256)
 gradient = np.vstack((gradient, gradient))
+
 
 def plot_color_gradients(cmap_category, cmap_list):
     fig, axes = plt.subplots(nrows=nrows)
@@ -44,7 +45,7 @@ def plot_color_gradients(cmap_category, cmap_list):
     for ax in axes:
         ax.set_axis_off()
 
+
 for cmap_category, cmap_list in cmaps:
     plot_color_gradients(cmap_category, cmap_list)
     plt.savefig(f'line_styles_reference_{cmap_category}.ipe')
-

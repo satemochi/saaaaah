@@ -1,13 +1,14 @@
-
 """
 Simple demo of a horizontal bar chart.
 """
-import matplotlib.pyplot as plt; plt.rcdefaults()
+import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import use
-use('module://backend_ipe_sa2') 
 
+
+plt.rcdefaults()
+use('module://backend_ipe_sa2')
 
 # Example data
 people = ('Tom', 'Dick', 'Harry', 'Slim', 'Jim')

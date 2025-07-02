@@ -1,3 +1,19 @@
+"""
+This is a matplotlib backend to save in the Ipe file format.
+(ipe7.sourceforge.net).
+
+(c) 2014 Soyeon Baek, Otfried Cheong
+
+You can find the most current version at:
+http://www.github.com/otfried/ipe-tools/matplotlib
+
+You can use this backend by saving it anywhere on your PYTHONPATH.
+Use it as an external backend from matplotlib like this:
+
+  import matplotlib
+  matplotlib.use('module://backend_ipe')
+
+"""
 from codecs import getwriter
 from math import cos, radians, sin
 from os.path import exists
@@ -37,22 +53,22 @@ class RendererIpe(RendererBase):
         self.writer = XMLWriterIpe(ipewriter)
 
         super().__init__()
+        rcParams['pgf.texsystem'] = "pdflatex"  # use smae latex as Ipe
         self.__write_header()
         self.writer.start("page")
 
     def __write_header(self):
         self._start_id = self.writer.start(
             "ipe",
-            version="70005xxxxxx",
+            version="70006",
             creator="Matplotlib")
         self.__stylesheet()
-        self.__preamble()
 
     def __stylesheet(self):
-        if "ipe.stylesheet" in rcParams:
-            if (sheet := rcParams["ipe.stylesheet"]) is not None:
-                self.writer.insertSheet(sheet)
+        if "ipe.stylesheet" in rcParams and rcParams["ipe.stylesheet"]:
+            self.writer.insertSheet(rcParams["ipe.stylesheet"])
         self.writer.start("ipestyle", name="opacity")
+        self.__preamble()
         for i in range(10, 100, 10):
             self.writer.element("opacity", name=f"{i}%", value=f"{i / 100.0}")
         self.writer.end()
@@ -190,11 +206,11 @@ class RendererIpe(RendererBase):
         return self.width, self.height
 
     def get_text_width_height_descent(self, s, prop, ismath):
-        if "ipe.textsize" in rcParams and rcParams["ipe.textsize"] is False:
-            return 1, 1, 1
-        w, h, d = (LatexManager._get_cached_or_new()
-                   .get_width_height_descent(s, prop))
-        return w * (f := (_mpl_pt_to_in := 1/72) * self.dpi), h * f, d * f
+        if ("ipe.textsize" in rcParams and rcParams["ipe.textsize"] is True):
+            w, h, d = (LatexManager._get_cached_or_new()
+                       .get_width_height_descent(s, prop))
+            return w * (f := (1/72) * self.dpi), h * f, d * f
+        return 1, 1, 1
 
     @staticmethod
     def __gen_opacity(attrib, opaq):

@@ -5,11 +5,13 @@ import matplotlib.pyplot as plt
 from matplotlib import use
 use('module://backend_ipe_sa2')
 
+
 def wise(v):
     if v == 1:
         return "CCW"
     else:
         return "CW"
+
 
 def make_circle(r):
     t = np.arange(0, np.pi * 2.0, 0.01)
@@ -18,13 +20,14 @@ def make_circle(r):
     y = r * np.sin(t)
     return np.hstack((x, y))
 
-Path = mpath.Path
 
+Path = mpath.Path
 fig, ax = plt.subplots()
 
 inside_vertices = make_circle(0.5)
 outside_vertices = make_circle(1.0)
-codes = np.ones(len(inside_vertices), dtype=mpath.Path.code_type) * mpath.Path.LINETO
+codes = np.ones(len(inside_vertices),
+                dtype=mpath.Path.code_type) * mpath.Path.LINETO
 codes[0] = mpath.Path.MOVETO
 
 for i, (inside, outside) in enumerate(((1, 1), (1, -1), (-1, 1), (-1, -1))):
@@ -46,8 +49,8 @@ for i, (inside, outside) in enumerate(((1, 1), (1, -1), (-1, 1), (-1, -1))):
     ax.annotate("Outside %s,\nInside %s" % (wise(outside), wise(inside)),
                 (i * 2.5, -1.5), va="top", ha="center")
 
-ax.set_xlim(-2,10)
-ax.set_ylim(-3,2)
+ax.set_xlim(-2, 10)
+ax.set_ylim(-3, 2)
 ax.set_title('Mmm, donuts!')
 ax.set_aspect(1.0)
 
