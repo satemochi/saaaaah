@@ -6,8 +6,6 @@
 
 
 
-
-
 ## Description
 
 This workshop specializes in creating (unofficial) logos for the drawing tool
@@ -36,41 +34,6 @@ please report them
 [here](https://github.com/satemochi/saaaaah/issues).
 Additionally, if you discover any bugs or errors in our artworks or staff,
 we would appreciate your report.
-
-
-
-
-
-## About `backend_ipe.py`
-
-The official
-[backend_ipe.py](https://github.com/otfried/ipe-tools/tree/master/matplotlib)
-has been deprecated due to
-Matplotlib 3.6.
-So, we have refactored it and published as an unofficial version.
-See, [here](https://github.com/satemochi/saaaaah/blob/master/geometric_misc/ipe_logo_workshop/backend_ipe/backend_ipe_sa2.py).
-This refactored version is also licensed GPL, same as the original.
-
-If you cannot generate `.ipe` files by official `backend_ipe.py`, then
-please try our version.
-At least each staff in this workshop can be generated correctly.
-
-The usage of ours in any python code is as follows
-(however this is almost same as the original usage):
-
-1. Import `use` method, and specify `backend_ipe_sa2`
-```python
-from matplotlib import pyplot as plt, use
-use("module://backend_ipe_sa2")
-```
-2.  Then, replace `plt.show()` with `plt.savefig('xxx.ipe')`.
-`xxx.ipe` is the output file name.
-
-
-However, this version is still incomplete.
-For example, it needs to be able to correctly apply an alpha channel
-in the `draw_image` method.
-We do not understand the specification of `image` element of Ipe, hmm...
 
 
 
