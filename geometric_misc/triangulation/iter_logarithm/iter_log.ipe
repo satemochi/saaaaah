@@ -1,0 +1,184 @@
+<ipe version="70007" creator="Matplotlib">
+ <ipestyle name="opacity">
+  <opacity name="10%" value="0.1"/>
+  <opacity name="20%" value="0.2"/>
+  <opacity name="30%" value="0.3"/>
+  <opacity name="40%" value="0.4"/>
+  <opacity name="50%" value="0.5"/>
+  <opacity name="60%" value="0.6"/>
+  <opacity name="70%" value="0.7"/>
+  <opacity name="80%" value="0.8"/>
+  <opacity name="90%" value="0.9"/>
+ </ipestyle>
+ <page>
+  <path fill="1.0 1.0 1.0" stroke="1.0 1.0 1.0" pen="0.0" cap="0" join="0" fillrule="wind">
+0.0 0.0 m
+460.8 0.0 l
+460.8 345.59999999999997 l
+0.0 345.59999999999997 l
+h
+  </path>
+  <path fill="1.0 1.0 1.0" stroke="0.0 0.0 0.0" pen="0.0" cap="0" join="0" fillrule="wind">
+57.6 38.01599999999999 m
+414.72 38.01599999999999 l
+414.72 304.12799999999993 l
+57.6 304.12799999999993 l
+h
+  </path>
+  <group clip="57.6 38.01599999999999 m 414.72 38.01599999999999 l 414.72 304.12799999999993 l 57.6 304.12799999999993 l h">
+   <path fill="0.12156862745098039 0.4666666666666667 0.7058823529411765" stroke="0.0 0.0 0.0" pen="0.0" cap="0" join="0" fillrule="wind">
+57.6 24.710399999999993 m
+57.60463792207792 24.710399999999993 l
+57.60463792207792 51.32159999999999 l
+57.6 51.32159999999999 l
+h
+   </path>
+  </group>
+  <group clip="57.6 38.01599999999999 m 414.72 38.01599999999999 l 414.72 304.12799999999993 l 57.6 304.12799999999993 l h">
+   <path fill="0.12156862745098039 0.4666666666666667 0.7058823529411765" stroke="0.0 0.0 0.0" pen="0.0" cap="0" join="0" fillrule="wind">
+57.6 57.97439999999999 m
+77.77496103896104 57.97439999999999 l
+77.77496103896104 84.58559999999999 l
+57.6 84.58559999999999 l
+h
+   </path>
+  </group>
+  <group clip="57.6 38.01599999999999 m 414.72 38.01599999999999 l 414.72 304.12799999999993 l 57.6 304.12799999999993 l h">
+   <path fill="0.12156862745098039 0.4666666666666667 0.7058823529411765" stroke="0.0 0.0 0.0" pen="0.0" cap="0" join="0" fillrule="wind">
+57.6 91.23839999999998 m
+138.59203324675326 91.23839999999998 l
+138.59203324675326 117.84959999999998 l
+57.6 117.84959999999998 l
+h
+   </path>
+  </group>
+  <group clip="57.6 38.01599999999999 m 414.72 38.01599999999999 l 414.72 304.12799999999993 l 57.6 304.12799999999993 l h">
+   <path fill="0.12156862745098039 0.4666666666666667 0.7058823529411765" stroke="0.0 0.0 0.0" pen="0.0" cap="0" join="0" fillrule="wind">
+57.6 124.50239999999998 m
+219.68146285714286 124.50239999999998 l
+219.68146285714286 151.1136 l
+57.6 151.1136 l
+h
+   </path>
+  </group>
+  <group clip="57.6 38.01599999999999 m 414.72 38.01599999999999 l 414.72 304.12799999999993 l 57.6 304.12799999999993 l h">
+   <path fill="0.12156862745098039 0.4666666666666667 0.7058823529411765" stroke="0.0 0.0 0.0" pen="0.0" cap="0" join="0" fillrule="wind">
+57.6 157.76639999999998 m
+381.5356675324676 157.76639999999998 l
+381.5356675324676 184.37759999999997 l
+57.6 184.37759999999997 l
+h
+   </path>
+  </group>
+  <group clip="57.6 38.01599999999999 m 414.72 38.01599999999999 l 414.72 304.12799999999993 l 57.6 304.12799999999993 l h">
+   <path fill="0.12156862745098039 0.4666666666666667 0.7058823529411765" stroke="0.0 0.0 0.0" pen="0.0" cap="0" join="0" fillrule="wind">
+57.6 191.03039999999996 m
+101558.14436571431 191.03039999999996 l
+101558.14436571431 217.64159999999995 l
+57.6 217.64159999999995 l
+h
+   </path>
+  </group>
+  <path fill="0.0 0.0 0.0" stroke="0.0 0.0 0.0" pen="0.8" cap="0" join="1" fillrule="wind">
+57.6 38.01599999999999 m
+57.6 34.51599999999999 l
+  </path>
+  <text halign="center" valign="top" stroke="0.0 0.0 0.0" type="label" size="10.0" pos="57.6 31.01599999999999">0</text>
+  <path fill="0.0 0.0 0.0" stroke="0.0 0.0 0.0" pen="0.8" cap="0" join="1" fillrule="wind">
+103.97922077922078 38.01599999999999 m
+103.97922077922078 34.51599999999999 l
+  </path>
+  <text halign="center" valign="top" stroke="0.0 0.0 0.0" type="label" size="10.0" pos="103.97922077922078 31.01599999999999">10000</text>
+  <path fill="0.0 0.0 0.0" stroke="0.0 0.0 0.0" pen="0.8" cap="0" join="1" fillrule="wind">
+150.35844155844157 38.01599999999999 m
+150.35844155844157 34.51599999999999 l
+  </path>
+  <text halign="center" valign="top" stroke="0.0 0.0 0.0" type="label" size="10.0" pos="150.35844155844157 31.01599999999999">20000</text>
+  <path fill="0.0 0.0 0.0" stroke="0.0 0.0 0.0" pen="0.8" cap="0" join="1" fillrule="wind">
+196.73766233766236 38.01599999999999 m
+196.73766233766236 34.51599999999999 l
+  </path>
+  <text halign="center" valign="top" stroke="0.0 0.0 0.0" type="label" size="10.0" pos="196.73766233766236 31.01599999999999">30000</text>
+  <path fill="0.0 0.0 0.0" stroke="0.0 0.0 0.0" pen="0.8" cap="0" join="1" fillrule="wind">
+243.11688311688314 38.01599999999999 m
+243.11688311688314 34.51599999999999 l
+  </path>
+  <text halign="center" valign="top" stroke="0.0 0.0 0.0" type="label" size="10.0" pos="243.11688311688314 31.01599999999999">40000</text>
+  <path fill="0.0 0.0 0.0" stroke="0.0 0.0 0.0" pen="0.8" cap="0" join="1" fillrule="wind">
+289.49610389610393 38.01599999999999 m
+289.49610389610393 34.51599999999999 l
+  </path>
+  <text halign="center" valign="top" stroke="0.0 0.0 0.0" type="label" size="10.0" pos="289.49610389610393 31.01599999999999">50000</text>
+  <path fill="0.0 0.0 0.0" stroke="0.0 0.0 0.0" pen="0.8" cap="0" join="1" fillrule="wind">
+335.87532467532475 38.01599999999999 m
+335.87532467532475 34.51599999999999 l
+  </path>
+  <text halign="center" valign="top" stroke="0.0 0.0 0.0" type="label" size="10.0" pos="335.87532467532475 31.01599999999999">60000</text>
+  <path fill="0.0 0.0 0.0" stroke="0.0 0.0 0.0" pen="0.8" cap="0" join="1" fillrule="wind">
+382.2545454545455 38.01599999999999 m
+382.2545454545455 34.51599999999999 l
+  </path>
+  <text halign="center" valign="top" stroke="0.0 0.0 0.0" type="label" size="10.0" pos="382.2545454545455 31.01599999999999">70000</text>
+  <path fill="0.0 0.0 0.0" stroke="0.0 0.0 0.0" pen="0.8" cap="0" join="1" fillrule="wind">
+57.6 38.01599999999999 m
+54.1 38.01599999999999 l
+  </path>
+  <text halign="right" valign="center_baseline" stroke="0.0 0.0 0.0" type="label" size="10.0" pos="50.6 38.01599999999999">0</text>
+  <path fill="0.0 0.0 0.0" stroke="0.0 0.0 0.0" pen="0.8" cap="0" join="1" fillrule="wind">
+57.6 71.27999999999999 m
+54.1 71.27999999999999 l
+  </path>
+  <text halign="right" valign="center_baseline" stroke="0.0 0.0 0.0" type="label" size="10.0" pos="50.6 71.27999999999999">1</text>
+  <path fill="0.0 0.0 0.0" stroke="0.0 0.0 0.0" pen="0.8" cap="0" join="1" fillrule="wind">
+57.6 104.54399999999998 m
+54.1 104.54399999999998 l
+  </path>
+  <text halign="right" valign="center_baseline" stroke="0.0 0.0 0.0" type="label" size="10.0" pos="50.6 104.54399999999998">2</text>
+  <path fill="0.0 0.0 0.0" stroke="0.0 0.0 0.0" pen="0.8" cap="0" join="1" fillrule="wind">
+57.6 137.808 m
+54.1 137.808 l
+  </path>
+  <text halign="right" valign="center_baseline" stroke="0.0 0.0 0.0" type="label" size="10.0" pos="50.6 137.808">3</text>
+  <path fill="0.0 0.0 0.0" stroke="0.0 0.0 0.0" pen="0.8" cap="0" join="1" fillrule="wind">
+57.6 171.07199999999997 m
+54.1 171.07199999999997 l
+  </path>
+  <text halign="right" valign="center_baseline" stroke="0.0 0.0 0.0" type="label" size="10.0" pos="50.6 171.07199999999997">4</text>
+  <path fill="0.0 0.0 0.0" stroke="0.0 0.0 0.0" pen="0.8" cap="0" join="1" fillrule="wind">
+57.6 204.33599999999998 m
+54.1 204.33599999999998 l
+  </path>
+  <text halign="right" valign="center_baseline" stroke="0.0 0.0 0.0" type="label" size="10.0" pos="50.6 204.33599999999998">5</text>
+  <path fill="0.0 0.0 0.0" stroke="0.0 0.0 0.0" pen="0.8" cap="0" join="1" fillrule="wind">
+57.6 237.59999999999997 m
+54.1 237.59999999999997 l
+  </path>
+  <text halign="right" valign="center_baseline" stroke="0.0 0.0 0.0" type="label" size="10.0" pos="50.6 237.59999999999997">6</text>
+  <path fill="0.0 0.0 0.0" stroke="0.0 0.0 0.0" pen="0.8" cap="0" join="1" fillrule="wind">
+57.6 270.8639999999999 m
+54.1 270.8639999999999 l
+  </path>
+  <text halign="right" valign="center_baseline" stroke="0.0 0.0 0.0" type="label" size="10.0" pos="50.6 270.8639999999999">7</text>
+  <path fill="0.0 0.0 0.0" stroke="0.0 0.0 0.0" pen="0.8" cap="0" join="1" fillrule="wind">
+57.6 304.12799999999993 m
+54.1 304.12799999999993 l
+  </path>
+  <text halign="right" valign="center_baseline" stroke="0.0 0.0 0.0" type="label" size="10.0" pos="50.6 304.12799999999993">8</text>
+  <path stroke="0.0 0.0 0.0" pen="0.8" cap="2" join="0" fillrule="wind">
+57.6 38.01599999999999 m
+57.6 304.12799999999993 l
+  </path>
+  <path stroke="0.0 0.0 0.0" pen="0.8" cap="2" join="0" fillrule="wind">
+414.72 38.01599999999999 m
+414.72 304.12799999999993 l
+  </path>
+  <path stroke="0.0 0.0 0.0" pen="0.8" cap="2" join="0" fillrule="wind">
+57.6 38.01599999999999 m
+414.7200000000001 38.01599999999999 l
+  </path>
+  <path stroke="0.0 0.0 0.0" pen="0.8" cap="2" join="0" fillrule="wind">
+57.6 304.12799999999993 m
+414.7200000000001 304.12799999999993 l
+  </path>
+ </page>
+</ipe>
