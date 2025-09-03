@@ -31,7 +31,7 @@ def earclip(polygon):
     while len(triangles) < n-2:
         i = ear.popleft()
         j, k = prev[i], succ[i]
-        triangles.append((polygon[j], polygon[i], polygon[k]))
+        triangles.append((j, i, k))
         succ[j], prev[k] = k, j
         del prev[i]
         del succ[i]
@@ -91,7 +91,7 @@ if __name__ == '__main__':
     plt.gca().add_patch(plt.Polygon(polygon, alpha=0.3))
     triangles = earclip(polygon)
     for t in triangles:
-        plt.gca().add_patch(plt.Polygon(t, fill=False))
+        plt.gca().add_patch(plt.Polygon([polygon[i] for i in t], fill=False))
     plt.gca().set_aspect('equal')
     plt.gca().axis('off')
     plt.autoscale()
