@@ -57,18 +57,32 @@ class circle:
                 <= self.__sr)
 
     def draw(self):
-        c = plt.Circle(self.__c, self.__r, fill=False, color='g')
+        c = plt.Circle(self.__c, self.__r, fill=False, color='g', alpha=0.2)
         plt.gca().add_artist(c)
         plt.scatter([x for x, _ in self.__pts], [y for _, y in self.__pts],
-                    s=25, c='r', ec='k', zorder=10)
+                    s=20, c='r', ec='k', zorder=10)
 
 
 def sec(pts):
     shuffle((_pts := [p for p in pts]))
     c = circle(_pts, (0, 1))
+
+    plt.gca().set_aspect('equal')
+    plt.gca().set_xlim(-0.25, 1.25)
+    plt.gca().set_ylim(-0.25, 1.25)
+    plt.tight_layout()
+
+    plt.scatter([x for x, _ in pts], [y for _, y in pts],
+                c='y', ec='k', s=20, alpha=0.2)
+    c.draw()
+    plt.draw()
+    plt.pause(0.05)
     for i, q in enumerate(_pts[2:], start=2):
         if not c.contains(q):
             c = _sec1(_pts, i)
+            c.draw()
+            plt.draw()
+            plt.pause(0.05)
     return c
 
 
@@ -77,6 +91,9 @@ def _sec1(pts, i):
     for j, q in enumerate(pts[1:i], start=1):
         if not c.contains(q):
             c = _sec2(pts, j, i)
+            c.draw()
+            plt.draw()
+            plt.pause(0.05)
     return c
 
 
@@ -85,10 +102,13 @@ def _sec2(pts, j, i):
     for k, q in enumerate(pts[:i]):
         if not c.contains(q):
             c = circle(pts, (k, j, i))
+            c.draw()
+            plt.draw()
+            plt.pause(0.05)
     return c
 
 
-def gen(n=20, s=1):
+def gen(n=320, s=1):
     seed(s)
     return [(random(), random()) for i in range(n)]
 
@@ -96,7 +116,7 @@ def gen(n=20, s=1):
 if __name__ == '__main__':
     sec((pts := gen())).draw()
 
-    plt.scatter([x for x, _ in pts], [y for _, y in pts], c='y', ec='k', s=20)
+#    plt.scatter([x for x, _ in pts], [y for _, y in pts], c='y', ec='k', s=20)
     plt.gca().set_aspect('equal')
     plt.gca().set_xlim(-0.25, 1.25)
     plt.gca().set_ylim(-0.25, 1.25)

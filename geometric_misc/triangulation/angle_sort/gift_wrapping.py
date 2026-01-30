@@ -1,10 +1,7 @@
-from matplotlib import pyplot as plt
-
-
 def gift_wrapping(pts):
-    """ [Assumption]: no collinear triple in `pts` """
-    ch = [min(pts)]
-    while True:
+    """ A gift wrapping algorithm for convex hull of 2d points """
+    ch = [min(pts)]     # start from leftmost and lowest
+    while True:         # try to find support lines
         q = next((targets := iter(_ for _ in pts if _ != ch[-1])))
         for r in targets:
             if __is_right_turn(ch[-1], q, r):
@@ -17,7 +14,10 @@ def gift_wrapping(pts):
 
 def __is_right_turn(p, q, r):
     (x1, y1), (x2, y2), (x3, y3) = p, q, r
-    return x1 * (y3 - y2) + x2 * (y1 - y3) + x3 * (y2 - y1) > 0
+    if (c := x1 * (y3 - y2) + x2 * (y1 - y3) + x3 * (y2 - y1)) != 0:
+        return c > 0
+    return ((x1-x2) * (x1-x2) + (y1-y2) * (y1-y2)       # on tie (collinear)
+            < (x1-x3) * (x1-x3) + (y1-y3) * (y1-y3))    # won by far to ch[-1]
 
 
 def gen(n=30, s=9):
@@ -28,6 +28,7 @@ def gen(n=30, s=9):
 
 if __name__ == '__main__':
     pts = gen()
+    from matplotlib import pyplot as plt
     plt.scatter([x for x, _ in pts], [y for _, y in pts], color='#ff6666')
     plt.gca().add_patch(plt.Polygon(gift_wrapping(pts), alpha=0.3, zorder=-10))
 

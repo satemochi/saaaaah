@@ -1,9 +1,8 @@
 from functools import cmp_to_key
-from matplotlib import pyplot as plt
 
 
 def graham_scan(pts):
-    """ Angular sorting based Graham's scan for convex hull (2d) """
+    """ Graham's scan (with angular sorting) for 2d convex hull of points """
     (ox, oy) = min(pts, key=lambda p: p[1])
     ch = [(ox, oy)]
     for x, y in sorted(((x-ox, y-oy) for x, y in pts if x != ox or y != oy),
@@ -43,6 +42,7 @@ def gen(n=30, s=9):
 
 if __name__ == '__main__':
     pts = gen()
+    from matplotlib import pyplot as plt
     plt.scatter([x for x, _ in pts], [y for _, y in pts], color='#33cc33')
     plt.gca().add_patch(plt.Polygon(graham_scan(pts), alpha=0.3, zorder=-10))
 
