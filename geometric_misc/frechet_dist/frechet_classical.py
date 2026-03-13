@@ -21,12 +21,9 @@ class pc:   # polygonal curve (static)
     def length(self):   # length of self (measured by Euclidean)
         return sum(dist(p, q) for p, q in zip(self.__pts, self.__pts[1:]))
 
-    def frechet_dist(self, other, eps=0.01):
-        """ ref) CGAL Frechet_classical.h
-
-            TODO: init _max is not confortable
-                    (diagonal length of union of bbox is better?) """
-        _min, _max = 0, self.length + other.length
+    def frechet_dist(self, other, eps=1e-7):
+        """ ref) CGAL Frechet_classical.h   """
+        _min, _max = 0, self.__diag_len_of_bbox(self, other)
         while _max - _min >= eps:
             split = (_max + _min) / 2
             if self.__less_than(other, split):
@@ -35,23 +32,28 @@ class pc:   # polygonal curve (static)
                 _min = split
         return (_min, _max)
 
-    def __less_than(self, other, d):
-        """ ref) On configuration space / free diagram
-                https://sarielhp.org/book/ (good note by Sariel Har-Peled)
-            [paper] Alt and Godau (1995)
-                Computing the Frechet distance between two polygonal curves
+    @staticmethod
+    def __diag_len_of_bbox(*args):
+        _l, _b = float('inf'), float('inf')
+        _r, _a = -float('inf'), -float('inf')
+        for pts in args:
+            _l = min(_l, min(x for x, _ in pts))    # left
+            _b = min(_b, min(y for _, y in pts))    # below
+            _r = max(_r, max(x for x, _ in pts))    # right
+            _a = max(_a, max(y for _, y in pts))    # above
+        return dist((_l, _b), (_r, _a))
 
-            TODO: containing redundant sentences (need more if-else states)
-        """
-        square_dist = d * d
-        if (self.__square_dist(self[0], other[0]) > square_dist or
-                self.__square_dist(self[-1], other[-1]) > square_dist):
+    def __less_than(self, other, d):
+        """ ref) https://sarielhp.org/book/chapters/frechet.pdf
+            TODO: containing redundant comp-paths (more if-else statements) """
+        if (self.__square_dist(self[0], other[0]) > (dd := d * d) or
+                self.__square_dist(self[-1], other[-1]) > dd):
             return False
         checked, stack = set(), [(0, 0)]
         while stack:
             i, j = stack.pop()
             checked.add((i, j))
-            if (i, j) == (self.n_cell, other.n_cell):
+            if (i, j) == (g := (self.n_cell, other.n_cell)):    # g: goal cell
                 return True
             if self.__int(self[i+1], other[j], other[j+1], d):
                 if (i+1, j) not in checked and i+1 < self.n_ind:
