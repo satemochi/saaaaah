@@ -17,10 +17,6 @@ class pc:   # polygonal curve (static)
     def n_cell(self):   # #-column in configuration; #-rows is other.n_cell.
         return len(self.__pts) - 2
 
-    @cached_property
-    def length(self):   # length of self (measured by Euclidean)
-        return sum(dist(p, q) for p, q in zip(self.__pts, self.__pts[1:]))
-
     def frechet_dist(self, other, eps=1e-7):
         """ ref) CGAL Frechet_classical.h   """
         _min, _max = 0, self.__diag_len_of_bbox(self, other)
