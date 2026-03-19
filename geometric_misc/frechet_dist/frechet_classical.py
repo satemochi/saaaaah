@@ -2,24 +2,33 @@ from functools import cached_property
 from math import dist, isclose, sqrt
 
 
-class pc:   # polygonal curve (static)
+class polygonal_curve:
     def __init__(self, pts):
         self.__pts = pts
+        self.__bbox = self.__calc_bbox()
+
+    def __calc_bbox(self):
+        return ((min(x for x, _ in self.__pts), min(y for _, y in self.__pts)),
+                (max(x for x, _ in self.__pts), max(y for _, y in self.__pts)))
 
     def __getitem__(self, key):
         return self.__pts[key]
 
     @cached_property
-    def n_ind(self):    # number of indices for configuration space
+    def ni(self):   # number of indices for configuration space
         return len(self.__pts) - 1
 
     @cached_property
-    def n_cell(self):   # #-column in configuration; #-rows is other.n_cell.
+    def nc(self):   # #-columns in configuration; #-rows is other.nc.
         return len(self.__pts) - 2
+
+    @property
+    def bbox(self):
+        return self.__bbox
 
     def frechet_dist(self, other, eps=1e-7):
         """ ref) CGAL Frechet_classical.h   """
-        _min, _max = 0, self.__diag_len_of_bbox(self, other)
+        _min, _max = 0, self.__diag_len_of_bbox(self.bbox, other.bbox)
         while _max - _min >= eps:
             split = (_max + _min) / 2
             if self.__less_than(other, split):
@@ -40,8 +49,7 @@ class pc:   # polygonal curve (static)
         return dist((_l, _b), (_r, _a))
 
     def __less_than(self, other, d):
-        """ ref) https://sarielhp.org/book/chapters/frechet.pdf
-            TODO: containing redundant comp-paths (more if-else statements) """
+        """ ref) https://sarielhp.org/book/chapters/frechet.pdf """
         if (self.__square_dist(self[0], other[0]) > (dd := d * d) or
                 self.__square_dist(self[-1], other[-1]) > dd):
             return False
@@ -49,13 +57,13 @@ class pc:   # polygonal curve (static)
         while stack:
             i, j = stack.pop()
             checked.add((i, j))
-            if (i, j) == (g := (self.n_cell, other.n_cell)):    # g: goal cell
+            if (i, j) == (g := (self.nc, other.nc)):    # g: goal cell
                 return True
-            if self.__int(self[i+1], other[j], other[j+1], d):
-                if (i+1, j) not in checked and i+1 < self.n_ind:
+            if i < self.nc and self.__int(self[i+1], other[j], other[j+1], d):
+                if (i+1, j) not in checked and i+1 < self.ni:
                     stack.append((i+1, j))
-            if self.__int(other[j+1], self[i], self[i+1], d):
-                if (i, j+1) not in checked and j+1 < other.n_ind:
+            if j < other.nc and self.__int(other[j+1], self[i], self[i+1], d):
+                if (i, j+1) not in checked and j+1 < other.ni:
                     stack.append((i, j+1))
         return False
 
@@ -96,6 +104,6 @@ if __name__ == '__main__':
     from random import random, seed
     seed(0)
     n, m = 10, 12
-    p = pc([((i+1)/n, random()) for i in range(n)])
-    q = pc([((i+1)/m, random()) for i in range(m)])
+    p = polygonal_curve([((i+1)/n, random()) for i in range(n)])
+    q = polygonal_curve([((i+1)/m, random()) for i in range(m)])
     print(p.frechet_dist(q))
