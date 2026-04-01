@@ -53,11 +53,12 @@ class polygonal_curve:
         if (self.__square_dist(self[0], other[0]) > (dd := d * d) or
                 self.__square_dist(self[-1], other[-1]) > dd):
             return False
-        checked, stack = set(), [(0, 0)]
+        checked, stack, g = set(), [(0, 0)], (self.nc, other.nc)
+
         while stack:
             i, j = stack.pop()
             checked.add((i, j))
-            if (i, j) == (g := (self.nc, other.nc)):    # g: goal cell
+            if (i, j) == g:
                 return True
             if i < self.nc and self.__int(self[i+1], other[j], other[j+1], d):
                 if (i+1, j) not in checked and i+1 < self.ni:

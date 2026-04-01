@@ -1,6 +1,6 @@
 from random import randint, seed
 from unittest import TestCase, main
-from gmpy2 import mpq, prev_prime
+from gmpy2 import mpq
 
 
 class black_box:
