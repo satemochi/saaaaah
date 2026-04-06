@@ -22,9 +22,8 @@ class black_box:
 def rational_search(unknown, domain_size):
     """ ref) Kwek & Mehlhorn (2003): Optimal search for rationals """
     _x = __detect_int_part(unknown)
-    _m = domain_size // _x if _x > 0 else domain_size
-    _alpha, _beta, _gamma, _delta = __detect_init_range(unknown, _x, _m)
-    a, b = __find_fraction(_alpha, _beta, _gamma, _delta)
+    _m = domain_size // _x if _x > 1 else domain_size
+    a, b = __find_fraction(*__detect_init_range(unknown, _x, _m * _m << 1))
     return _x + mpq(a, b)
 
 
@@ -33,16 +32,16 @@ def __detect_int_part(unknown):
     while not unknown <= _max:  # exponential search
         _max = _max << 1
     _min = _max >> 1
-    while _max - _min != 1:
-        if unknown <= (split := ((_min + _max) >> 1)):  # binary search
+    while _max - _min != 1:     # binary search
+        if unknown <= (split := ((_min + _max) >> 1)):
             _max = split
         else:
             _min = split
     return _min
 
 
-def __detect_init_range(x, _x, _m):
-    _min, _max = 0, (denom := 2 * _m * _m)
+def __detect_init_range(x, _x, denom):
+    _min, _max = 0, denom
     while _max - _min != 1:
         if x <= _x + mpq((split := ((_min + _max) >> 1)), denom):
             _max = split
