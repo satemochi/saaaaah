@@ -138,7 +138,6 @@ class polynomial:
         return len(self.__a) - 1
 
     def __repr__(self):
-#        return "".join([self.__s(i) for i in reversed(range(len(self.__a)))])
         return "".join([self.__s(i) for i in reversed(range(self.dim+1))])
 
     def __getitem__(self, i):
