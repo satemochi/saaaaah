@@ -5,31 +5,7 @@ import networkx as nx
 from pulp import LpProblem, lpSum, LpVariable, PULP_CBC_CMD
 
 
-@nx._dispatchable(graphs=None, returns_graph=True)
 def shrikhande_graph(create_using=None):
-    r"""
-    Returns the Shrikhane Graph.
-
-    The Shrikhande graph has 16 nodes and 48 edges.
-    This graph can be constructed as a Cayley graph [1]_.
-    The vertex set is $\mathbb{Z}_4 \times \mathbb{Z}_4$.
-    Two vertices are adjacent if and only if the difference is in
-    $\{\pm(1, 0), \pm(0, 1), \pm(1, 1)\}$.
-
-    Parameters
-    ----------
-    create_using : NetworkX graph constructor, optional (default=nx.Graph)
-       Graph type to create. If graph instance, then cleared before populated.
-
-    Returns
-    -------
-    G : networkx Graph
-        Shrikhande Graph with 16 nodes and 48 edges
-
-    References
-    ----------
-    .. [1] https://en.wikipedia.org/wiki/Shrikhande_graph
-    """
     G = nx.from_dict_of_lists(
         {
             (0, 0): [(0, 1), (3, 0), (3, 3), (1, 0), (1, 1), (0, 3)],
@@ -110,6 +86,13 @@ class test_dual_numbers(TestCase):
         _ = {(1, 0), (0, 1), (1, 1), (3, 0), (0, 3), (3, 3)}    # -1 % 4 = 3
         for (a, b), (c, d) in g.edges:
             self.assertTrue(((a - c) % 4, (b - d) % 4) in _)
+
+    def test_property(self):
+        g = shrikhande_graph()
+        self.assertTrue(sorted(g) == [(u, v) for u in range(4)
+                                      for v in range(4)])
+        self.assertTrue(g.number_of_edges() == 48)
+        self.assertTrue([d for n, d in g.degree()] == 16 * [6])
 
 
 if __name__ == '__main__':
