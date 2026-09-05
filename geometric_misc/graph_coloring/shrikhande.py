@@ -1,35 +1,36 @@
+from functools import wraps
 from math import cos, pi, sin
 from unittest import TestCase, main
+
 from matplotlib import pyplot as plt, use
 import networkx as nx
 from pulp import LpProblem, lpSum, LpVariable, PULP_CBC_CMD
 
 
-def shrikhande_graph(create_using=None):
-    G = nx.from_dict_of_lists(
-        {
-            (0, 0): [(0, 1), (3, 0), (3, 3), (1, 0), (1, 1), (0, 3)],
-            (0, 1): [(0, 0), (0, 2), (3, 1), (3, 0), (1, 1), (1, 2)],
-            (3, 0): [(0, 0), (0, 1), (2, 0), (2, 3), (3, 1), (3, 3)],
-            (3, 3): [(0, 0), (3, 0), (0, 3), (2, 2), (2, 3), (3, 2)],
-            (1, 0): [(0, 0), (0, 3), (1, 1), (2, 0), (2, 1), (1, 3)],
-            (1, 1): [(0, 0), (0, 1), (1, 0), (1, 2), (2, 1), (2, 2)],
-            (0, 3): [(0, 0), (3, 3), (1, 0), (0, 2), (3, 2), (1, 3)],
-            (0, 2): [(0, 1), (0, 3), (3, 2), (3, 1), (1, 2), (1, 3)],
-            (3, 1): [(0, 1), (3, 0), (0, 2), (2, 0), (2, 1), (3, 2)],
-            (1, 2): [(0, 1), (1, 1), (0, 2), (1, 3), (2, 2), (2, 3)],
-            (2, 0): [(3, 0), (1, 0), (3, 1), (1, 3), (2, 1), (2, 3)],
-            (2, 3): [(3, 0), (3, 3), (1, 2), (1, 3), (2, 0), (2, 2)],
-            (2, 2): [(3, 3), (1, 1), (1, 2), (3, 2), (2, 1), (2, 3)],
-            (3, 2): [(3, 3), (0, 3), (0, 2), (3, 1), (2, 1), (2, 2)],
-            (2, 1): [(1, 0), (1, 1), (3, 1), (3, 2), (2, 0), (2, 2)],
-            (1, 3): [(1, 0), (0, 3), (0, 2), (1, 2), (2, 3), (2, 0)],
-        },
-        create_using=create_using,
-    )
-    G.name = "Shrikhande Graph"
-    return G
+def _raise_on_directed(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        create_using = args[0] if args else kwargs.get("create_using")
+        if create_using is not None:
+            G = nx.empty_graph(create_using=create_using)
+            if G.is_directed():
+                raise nx.NetworkXError("Directed Graph not supported in create_using")
+        return func(*args, **kwargs)
 
+    return wrapper
+
+
+@_raise_on_directed
+@nx._dispatchable(graphs=None, returns_graph=True)
+def shrikhande_graph(create_using=None):
+    rows = cols = range(4)
+    plus_one = [1, 2, 3, 0]
+    G = nx.empty_graph(0, create_using=create_using)
+    G.name = "Shrikhande Graph"
+    G.add_edges_from(((x, y), (plus_one[x], y)) for x in rows for y in cols)
+    G.add_edges_from(((x, y), (x, plus_one[y])) for x in rows for y in cols)
+    G.add_edges_from(((x, y), (plus_one[x], plus_one[y])) for x in rows for y in cols)
+    return G
 
 def __shrikhande_graph():
     from itertools import product
