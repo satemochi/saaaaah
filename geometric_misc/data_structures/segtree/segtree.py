@@ -12,7 +12,7 @@ class segtree:
         self.__n = len(a)
         self.__build(a)
 
-    def __build(self, a):   # make binary heap queue
+    def __build(self, a):   # making up as a binary heap queue
         h = [0] * (self.__n-1) + a
         for i in reversed(range(self.__n-1)):
             h[i] = h[(i << 1)+1] + h[(i+1) << 1]  # agg. of left/right children
@@ -31,9 +31,8 @@ class segtree:
             u, _l, _r = stack.pop()
             if i <= _l and _r <= j:
                 _sum += self.__hq[u]    # aggregation of the value in a segment
-            else:
-                mid = (_l + _r) // 2
-                if i >= mid:
+            else:                       # looking for proper inclusive segments
+                if i >= (mid := (_l + _r) >> 1):
                     stack.append(((u+1) << 1, mid, _r))
                 elif j <= mid:
                     stack.append(((u << 1)+1, _l, mid))

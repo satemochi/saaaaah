@@ -29,5 +29,5 @@ if __name__ == '__main__':
     plt.gca().autoscale()
     plt.gca().set_aspect('equal')
     plt.tight_layout()
-    # plt.savefig('gaus_lucas.ipe')
+    # plt.savefig('gauss_lucas.ipe')
     plt.show()
