@@ -31,7 +31,7 @@ def dsatur(g):
             if u in col:
                 continue
             s, d, _ = tbl[u]
-            sat[u] = sat[u] if (sat[u] >> c) & 1 else sat[u] + b 
+            sat[u] = sat[u] if (sat[u] >> c) & 1 else sat[u] + b
             tbl[u] = (sat[u].bit_count(), d-1, u)
         del tbl[v]
     return [col[v] for v in g]
@@ -41,14 +41,15 @@ def __get_color(x):
     i = 0
     while x >> i:
         if (x >> i) & 1 == 0:
-            return i
+            break
         i += 1
     return i
 
 
 if __name__ == '__main__':
     # g = nx.wheel_graph(9)
-    g = nx.frucht_graph()
+    # g = nx.frucht_graph()
+    g = nx.tutte_graph()
 
     pos = nx.spring_layout(g)
     cmap = plt.get_cmap('tab10')
