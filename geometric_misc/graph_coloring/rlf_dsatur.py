@@ -57,10 +57,9 @@ if __name__ == '__main__':
     _, axes = plt.subplots(1, 2, figsize=(10, 5))
 
     for ax, c in zip(axes, colors):
-        nx.draw_networkx_nodes(g, pos, ax=ax, node_color=c).set_edgecolor('k')
-        nx.draw_networkx_edges(g, pos, ax=ax)
-        nx.draw_networkx_labels(g, pos, ax=ax)
-
+        nx.draw_networkx_nodes(g, pos, ax=ax, node_size=45,
+                               node_color=c).set_edgecolor('k')
+        nx.draw_networkx_edges(g, pos, ax=ax, alpha=0.5)
         ax.set_aspect('equal')
         ax.axis('off')
 
