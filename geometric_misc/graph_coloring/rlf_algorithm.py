@@ -70,4 +70,5 @@ if __name__ == '__main__':
         ax.axis('off')
 
     plt.tight_layout()
+    # plt.savefig('rlf_dsatur.png', bbox_inches='tight')
     plt.show()
