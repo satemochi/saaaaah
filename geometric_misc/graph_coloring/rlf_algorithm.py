@@ -22,23 +22,19 @@ def rlf(_):
 def dsatur(g):
     """ DSatur: Graph coloring based on 'Degree of Saturation'
             https://en.wikipedia.org/wiki/DSatur """
-    satur = {v: 0 for v in g}
-    states = [(0, d, v) for v, d in g.degree]
-    tbl = {v: (s, d, v) for s, d, v in states}
-    colors = {}
-    while states:
-        s, d, v = max(states)
-        c = __get_color(satur[v])
-        colors[v], b = c, 1 << c
+    sat, tbl, col = {v: 0 for v in g}, {v: (0, d, v) for v, d in g.degree}, {}
+    while tbl:
+        s, d, v = max(tbl.values())
+        c = __get_color(sat[v])
+        col[v], b = c, 1 << c
         for u in g[v]:
-            if u in colors:
+            if u in col:
                 continue
             s, d, _ = tbl[u]
-            satur[u] = satur[u] if (satur[u] >> c) & 1 else satur[u] + b 
-            tbl[u] = (satur[u].bit_count(), d-1, u)
+            sat[u] = sat[u] if (sat[u] >> c) & 1 else sat[u] + b 
+            tbl[u] = (sat[u].bit_count(), d-1, u)
         del tbl[v]
-        states = list(tbl.values())
-    return [colors[v] for v in g]
+    return [col[v] for v in g]
 
 
 def __get_color(x):
@@ -51,8 +47,8 @@ def __get_color(x):
 
 
 if __name__ == '__main__':
-    g = nx.wheel_graph(9)
-    # g = nx.frucht_graph()
+    # g = nx.wheel_graph(9)
+    g = nx.frucht_graph()
 
     pos = nx.spring_layout(g)
     cmap = plt.get_cmap('tab10')
