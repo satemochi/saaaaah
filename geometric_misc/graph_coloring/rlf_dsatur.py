@@ -29,13 +29,15 @@ def dsatur(g):
         s, d, v = heappop(q)
         if v in col:
             continue
-        c = __get_color(sat[v])
-        col[v], b = c, 1 << c
+        col[v] = __get_color(sat[v])
+        b = 1 << col[v]
         for u in g[v]:
-            if u in col:
-                continue
-            sat[u] |= b
-            heappush(q, (-sat[u].bit_count(), d+1, u))
+            if u not in col:
+                if sat[u] & b:
+                    heappush(q, (s, d+1, u))
+                else:
+                    sat[u] |= b
+                    heappush(q, (s-1, d+1, u))
     return [col[v] for v in g]
 
 
