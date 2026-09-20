@@ -1,3 +1,4 @@
+from heapq import heapify, heappop, heappush
 import matplotlib.pyplot as plt
 import networkx as nx
 
@@ -22,18 +23,17 @@ def rlf(_):
 def dsatur(g):
     """ DSatur: Graph coloring based on 'Degree of Saturation'
             https://en.wikipedia.org/wiki/DSatur """
-    sat, tbl, col = {v: 0 for v in g}, {v: (0, d, v) for v, d in g.degree}, {}
-    while tbl:
-        s, d, v = max(tbl.values())
+    sat, q, col = {v: 0 for v in g}, [(0, -d, v) for v, d in g.degree], {}
+    heapify(q)
+    while len(col) < g.order():
+        s, d, v = heappop(q)
         c = __get_color(sat[v])
         col[v], b = c, 1 << c
         for u in g[v]:
             if u in col:
                 continue
-            s, d, _ = tbl[u]
             sat[u] = sat[u] if (sat[u] >> c) & 1 else sat[u] + b
-            tbl[u] = (sat[u].bit_count(), d-1, u)
-        del tbl[v]
+            heappush(q, (-sat[u].bit_count(), d+1, u))
     return [col[v] for v in g]
 
 
