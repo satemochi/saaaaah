@@ -32,7 +32,7 @@ def dsatur(g):
         c = __get_color(sat[v])
         col[v], b = c, 1 << c
         for u in g[v]:
-            if u in col:
+            if u in col or sat[u] & b:
                 continue
             sat[u] |= b
             heappush(q, (-sat[u].bit_count(), d+1, u))
