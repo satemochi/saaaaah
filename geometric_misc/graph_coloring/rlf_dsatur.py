@@ -39,7 +39,7 @@ def dsatur(g):
     return [col[v] for v in g]
 
 
-def __get_color(x):
+def __get_color(x):     # should be binary search?
     i = 0
     while x >> i:
         if (x >> i) & 1 == 0:
