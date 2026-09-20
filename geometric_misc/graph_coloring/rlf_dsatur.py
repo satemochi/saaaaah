@@ -27,12 +27,14 @@ def dsatur(g):
     heapify(q)
     while len(col) < g.order():
         s, d, v = heappop(q)
+        if v in col:
+            continue
         c = __get_color(sat[v])
         col[v], b = c, 1 << c
         for u in g[v]:
             if u in col:
                 continue
-            sat[u] = sat[u] if (sat[u] >> c) & 1 else sat[u] + b
+            sat[u] |= b
             heappush(q, (-sat[u].bit_count(), d+1, u))
     return [col[v] for v in g]
 
