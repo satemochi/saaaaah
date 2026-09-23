@@ -23,15 +23,17 @@ def rlf(_):
 def dsatur(g):
     """ DSatur: Graph coloring based on 'Degree of Saturation'
             https://en.wikipedia.org/wiki/DSatur """
-    sat, q, col = {v: 0 for v in g}, [(0, -d, v) for v, d in g.degree], {}
+    sat, col = {v: 0 for v in g}, {}
+    q, deg = [(0, -d, v) for v, d in g.degree], {v: -d for v, d in g.degree}
     heapify(q)
     while len(col) < g.order():
         s, d, v = heappop(q)
-        if v in col:
+        if v in col or deg[v] > d:
             continue
         col[v] = __get_color(sat[v])
         b = 1 << col[v]
         for u in g[v]:
+            deg[u] += 1
             if u not in col:
                 if sat[u] & b:
                     heappush(q, (s, d+1, u))
